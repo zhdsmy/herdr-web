@@ -2,6 +2,12 @@
 
 This is a lightweight internal onboarding note for agents working in this repo.
 
+## Git Workflow
+
+This repository is a personal project under `github.com/zhdsmy`. Direct commits and pushes to
+`main` are allowed; branch, merge request, and related-ID conventions do not apply unless the user
+explicitly requests them. Keep commit titles and descriptions clear.
+
 ## Start Here
 
 - Read `README.md` for the product shape, bridge runtime model, and local run commands.
@@ -9,6 +15,8 @@ This is a lightweight internal onboarding note for agents working in this repo.
 - Read `docs/vendoring.md` before touching `vendor/herdr-compat/`.
 - Read `docs/packaging.md` before changing desktop tarball or Android release artifact behavior.
 - Read `docs/release.md` before changing release scripts or release checklists.
+- Read `docs/deployment.md` before changing deployment behavior or operator runbooks. When present,
+  read the ignored `docs/deployment.local.md` for the current private environment inventory.
 - Web source lives in `web/src/`.
 - The repo-owned bridge implementation lives in `bridge/src/web_bridge.rs`.
 - The minimal Herdr compatibility crate lives in `vendor/herdr-compat/`.

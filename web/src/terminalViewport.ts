@@ -1,0 +1,48 @@
+const VIEWPORT_SETTLE_DELAY_MS = 180;
+
+type TerminalViewport = Pick<EventTarget, "addEventListener" | "removeEventListener">;
+type ViewportScheduler = Pick<
+  Window,
+  "cancelAnimationFrame" | "clearTimeout" | "requestAnimationFrame" | "setTimeout"
+>;
+
+export function observeTerminalViewport(
+  viewport: TerminalViewport,
+  scheduler: ViewportScheduler,
+  refit: () => void,
+) {
+  let animationFrame: number | null = null;
+  let settleTimer: number | null = null;
+
+  const cancelPendingRefit = () => {
+    if (animationFrame !== null) {
+      scheduler.cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+    if (settleTimer !== null) {
+      scheduler.clearTimeout(settleTimer);
+      settleTimer = null;
+    }
+  };
+
+  const scheduleRefit = () => {
+    cancelPendingRefit();
+    animationFrame = scheduler.requestAnimationFrame(() => {
+      animationFrame = null;
+      refit();
+    });
+    settleTimer = scheduler.setTimeout(() => {
+      settleTimer = null;
+      refit();
+    }, VIEWPORT_SETTLE_DELAY_MS);
+  };
+
+  viewport.addEventListener("resize", scheduleRefit);
+  viewport.addEventListener("scroll", scheduleRefit);
+
+  return () => {
+    viewport.removeEventListener("resize", scheduleRefit);
+    viewport.removeEventListener("scroll", scheduleRefit);
+    cancelPendingRefit();
+  };
+}

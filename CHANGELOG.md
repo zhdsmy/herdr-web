@@ -12,7 +12,17 @@
 
 ### Changed
 
+- Changed UI and terminal typography to bundled Geist variable fonts with CJK system fallbacks.
+- Refined the dark palette around neutral graphite surfaces and a restrained blue action accent.
+- Simplified Web-only delivery to a focused check followed by direct incremental asset deployment
+  without creating deployment backups.
+
 ### Fixed
+
+- Fixed browser layouts overlapping top and bottom safe areas without duplicating Android system
+  bar insets, and matched the browser top safe area to the app header.
+- Refit mobile terminals as the visual viewport changes and settles, including iOS and iPadOS
+  software-keyboard transitions.
 
 - Fixed icons rendering slightly off-center in square icon buttons (sidebar section header
   actions and the tab bar's new-tab button) by resetting the user-agent button padding, and

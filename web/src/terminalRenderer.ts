@@ -28,8 +28,9 @@ import type {
 } from "./mobileTerminalPrefs";
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
+const TERMINAL_BACKGROUND = "#0d0f14";
 const TERMINAL_FONT_FAMILY =
-  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace';
+  '"Geist Mono Variable", ui-monospace, "SFMono-Regular", "PingFang SC", "Microsoft YaHei", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
 const TOUCH_SELECTION_LONG_PRESS_MS = 600;
 const TOUCH_SELECTION_TOLERANCE_PX = 10;
@@ -153,6 +154,11 @@ export class GhosttyRenderer implements TerminalRenderer {
       throw new Error("terminal renderer disposed");
     }
 
+    await document.fonts?.load(`${this.#fontSizePx}px "Geist Mono Variable"`).catch(() => []);
+    if (this.#disposed) {
+      throw new Error("terminal renderer disposed");
+    }
+
     this.#container = container;
     const terminal = new Terminal({
       convertEol: false,
@@ -162,7 +168,7 @@ export class GhosttyRenderer implements TerminalRenderer {
       scrollback: 8000,
       smoothScrollDuration: 0,
       theme: {
-        background: "#11111b",
+        background: TERMINAL_BACKGROUND,
         foreground: "#cdd6f4",
         cursor: "#f5e0dc",
         selectionBackground: "#45475a",
@@ -202,7 +208,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     terminal.textarea?.blur();
     container.blur();
     container.removeAttribute("contenteditable");
-    terminal.renderer?.getCanvas().style.setProperty("background-color", "#11111b");
+    terminal.renderer?.getCanvas().style.setProperty("background-color", TERMINAL_BACKGROUND);
     terminal.renderer?.getCanvas().style.setProperty("image-rendering", "auto");
     this.#terminal = terminal;
     this.#fitAddon = fitAddon;

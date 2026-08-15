@@ -27,6 +27,7 @@ import type { TerminalConnectionState } from "./terminalConnectionStatus";
 import { findFirstUrlInSelection, openableHttpUrl } from "./terminalSelection";
 import { GhosttyRenderer } from "./terminalRenderer";
 import type { MobileTerminalTouchEvent, TerminalRenderer, TerminalSize } from "./terminalRenderer";
+import { observeTerminalViewport } from "./terminalViewport";
 import {
   appendTerminalInputBatch,
   drainTerminalInputBatch,
@@ -1107,6 +1108,15 @@ export function TerminalView({
         window.clearTimeout(timer);
       }
     };
+  }, [mobileControls, pane?.terminal_id, resizeTerminal]);
+
+  useEffect(() => {
+    if (!mobileControls || !pane || !window.visualViewport) {
+      return;
+    }
+    return observeTerminalViewport(window.visualViewport, window, () => {
+      resizeTerminal("refresh");
+    });
   }, [mobileControls, pane?.terminal_id, resizeTerminal]);
 
   const sendTerminalInput = (data: string) => {

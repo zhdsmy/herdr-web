@@ -1077,7 +1077,8 @@ export function App() {
   const [terminalFocusToken, setTerminalFocusToken] = useState(0);
   const isCompactLayout = useIsCompactLayout();
   const isTouchInput = useIsTouchInput();
-  const showMobileKeyboardHideRefit = isNativeAndroid();
+  const nativeAndroid = isNativeAndroid();
+  const showMobileKeyboardHideRefit = nativeAndroid;
   const connectionRefs = useRef<Record<string, BridgeConnectionRef>>({});
   const isCompactLayoutRef = useRef(isCompactLayout);
   const showDetailRef = useRef(showDetail);
@@ -3693,6 +3694,7 @@ export function App() {
       data-compact={isCompactLayout ? "true" : "false"}
       data-touch={isTouchInput ? "true" : "false"}
       data-detail={isCompactLayout && showDetail ? "true" : "false"}
+      data-native-android={nativeAndroid ? "true" : "false"}
     >
       <span className="sr-only" aria-live="polite" aria-atomic="true">
         {spaceReorderAnnouncement}

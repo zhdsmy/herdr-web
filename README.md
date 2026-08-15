@@ -49,6 +49,7 @@ vendor/herdr-compat/ minimal Herdr protocol/API compatibility crate
 scripts/run-bridge.sh
 scripts/check-vendor.sh
 docs/android.md
+docs/deployment.md
 docs/vendoring.md
 docs/packaging.md
 docs/release.md
@@ -131,6 +132,8 @@ Useful narrower commands:
 npm run lint:web
 npm run test:web
 npm run build:web
+npm run check:web
+npm run ship:web
 npm run bridge:fmt
 npm run bridge:test
 npm run bridge:build
@@ -141,6 +144,9 @@ scripts/package-tarball.sh vX.Y.Z macos-arm64
 scripts/package-tarball.sh vX.Y.Z macos-x86_64
 scripts/check-vendor.sh
 ```
+
+`npm run ship:web` runs the focused Web checks and deploys `web/dist` to the private target list.
+See [docs/deployment.md](docs/deployment.md) for the target format and deployment behavior.
 
 The Android app is a Capacitor shell around the bundled `web/dist` assets. It starts disconnected
 and uses the Bridge area in Settings to save one or more Herdr bridge URLs. Browser-served builds

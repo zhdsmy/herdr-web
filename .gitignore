@@ -7,6 +7,8 @@
 /bridge/target/
 /vendor/herdr-compat/target/
 /dist-packages/
+/.codegraph/
+/.deploy-web-targets
 .specs/
 .scratch/
 *.log
