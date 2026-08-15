@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { observeTerminalViewport } from "./terminalViewport";
+import { isVisualKeyboardOpen, observeTerminalViewport } from "./terminalViewport";
 
 function createScheduler() {
   let nextHandle = 1;
@@ -23,6 +23,20 @@ function createScheduler() {
   };
   return { frames, scheduler, timers };
 }
+
+describe("isVisualKeyboardOpen", () => {
+  it("detects a software keyboard from the obscured viewport height", () => {
+    expect(isVisualKeyboardOpen(844, { height: 540, offsetTop: 24 })).toBe(true);
+  });
+
+  it("ignores browser chrome and small viewport offsets", () => {
+    expect(isVisualKeyboardOpen(844, { height: 740, offsetTop: 25 })).toBe(false);
+  });
+
+  it("stays closed when visual viewport metrics are unavailable", () => {
+    expect(isVisualKeyboardOpen(844, null)).toBe(false);
+  });
+});
 
 describe("observeTerminalViewport", () => {
   it("refits on the next frame and after the viewport settles", () => {

@@ -14,7 +14,7 @@ use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use axum::extract::{DefaultBodyLimit, Path as AxumPath, Query, State};
 use axum::http::header::{
     ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_ORIGIN,
-    ACCESS_CONTROL_MAX_AGE, ACCESS_CONTROL_REQUEST_HEADERS, HOST, ORIGIN, VARY,
+    ACCESS_CONTROL_MAX_AGE, ACCESS_CONTROL_REQUEST_HEADERS, CACHE_CONTROL, HOST, ORIGIN, VARY,
 };
 use axum::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
 use axum::middleware::{self, Next};
@@ -1081,6 +1081,7 @@ async fn add_security_headers(
     next: Next,
 ) -> Response {
     let cors_origin = cors_origin_header(request.headers(), &policy);
+    let cache_control = static_cache_control(request.uri().path());
     let mut response = next.run(request).await;
     let headers = response.headers_mut();
     headers.insert(
@@ -1091,10 +1092,25 @@ async fn add_security_headers(
         HeaderName::from_static("content-security-policy"),
         content_security_policy(&policy),
     );
+    if let Some(cache_control) = cache_control {
+        headers.insert(CACHE_CONTROL, cache_control);
+    }
     if let Some(origin) = cors_origin {
         insert_cors_headers(headers, origin);
     }
     response
+}
+
+fn static_cache_control(path: &str) -> Option<HeaderValue> {
+    if path == "/api" || path.starts_with("/api/") || path == "/ws" || path.starts_with("/ws/") {
+        return None;
+    }
+    if path.starts_with("/assets/") {
+        return Some(HeaderValue::from_static(
+            "public, max-age=31536000, immutable",
+        ));
+    }
+    Some(HeaderValue::from_static("no-cache, must-revalidate"))
 }
 
 async fn preflight_handler(
@@ -4434,6 +4450,30 @@ fn startup_daemon_error(err: BridgeError) -> io::Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn static_cache_control_revalidates_entrypoints_and_caches_hashed_assets() {
+        assert_eq!(
+            static_cache_control("/").unwrap().to_str().unwrap(),
+            "no-cache, must-revalidate"
+        );
+        assert_eq!(
+            static_cache_control("/manifest.webmanifest")
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            "no-cache, must-revalidate"
+        );
+        assert_eq!(
+            static_cache_control("/assets/index-71kL36iJ.css")
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            "public, max-age=31536000, immutable"
+        );
+        assert_eq!(static_cache_control("/api/snapshot"), None);
+        assert_eq!(static_cache_control("/ws/events"), None);
+    }
 
     #[test]
     fn coalescer_sends_first_output_immediately() {

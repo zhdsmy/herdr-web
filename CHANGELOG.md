@@ -23,6 +23,10 @@
   bar insets, and matched the browser top safe area to the app header.
 - Refit mobile terminals as the visual viewport changes and settles, including iOS and iPadOS
   software-keyboard transitions.
+- Fixed intermittent iOS and iPadOS keyboard gaps and extended mobile surface backgrounds through
+  the bottom safe area without covering controls.
+- Added explicit revalidation for Web entrypoints while keeping hashed assets immutable, preventing
+  installed iOS Web Apps from reusing stale pages after deployment.
 
 - Fixed icons rendering slightly off-center in square icon buttons (sidebar section header
   actions and the tab bar's new-tab button) by resetting the user-agent button padding, and

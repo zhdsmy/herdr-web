@@ -136,6 +136,7 @@ import { ActionMenu, ConfirmDialog, RenameDialog, useLongPress } from "./overlay
 import type { MenuItem } from "./overlays";
 import { createSnapshotRefreshController } from "./refreshCoordinator";
 import { TerminalView } from "./TerminalView";
+import { isVisualKeyboardOpen } from "./terminalViewport";
 import {
   DEFAULT_TERMINAL_INPUT_BATCH_DELAY_MS,
   DEFAULT_TERMINAL_INPUT_TRANSPORT,
@@ -1077,6 +1078,7 @@ export function App() {
   const [terminalFocusToken, setTerminalFocusToken] = useState(0);
   const isCompactLayout = useIsCompactLayout();
   const isTouchInput = useIsTouchInput();
+  const visualKeyboardOpen = useVisualKeyboardOpen();
   const nativeAndroid = isNativeAndroid();
   const showMobileKeyboardHideRefit = nativeAndroid;
   const connectionRefs = useRef<Record<string, BridgeConnectionRef>>({});
@@ -3693,6 +3695,7 @@ export function App() {
       data-resizing-notes-list={resizingNotesListPane ? "true" : "false"}
       data-compact={isCompactLayout ? "true" : "false"}
       data-touch={isTouchInput ? "true" : "false"}
+      data-visual-keyboard={visualKeyboardOpen ? "open" : "closed"}
       data-detail={isCompactLayout && showDetail ? "true" : "false"}
       data-native-android={nativeAndroid ? "true" : "false"}
     >
@@ -9372,6 +9375,32 @@ function useIsCompactLayout() {
     };
   }, []);
   return compact;
+}
+
+function useVisualKeyboardOpen() {
+  const [open, setOpen] = useState(() =>
+    typeof window === "undefined"
+      ? false
+      : isVisualKeyboardOpen(window.innerHeight, window.visualViewport),
+  );
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) {
+      setOpen(false);
+      return;
+    }
+    const update = () => setOpen(isVisualKeyboardOpen(window.innerHeight, viewport));
+    update();
+    window.addEventListener("resize", update);
+    viewport.addEventListener("resize", update);
+    viewport.addEventListener("scroll", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      viewport.removeEventListener("resize", update);
+      viewport.removeEventListener("scroll", update);
+    };
+  }, []);
+  return open;
 }
 
 function isCompactLayoutViewport() {
