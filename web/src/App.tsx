@@ -136,7 +136,7 @@ import { ActionMenu, ConfirmDialog, RenameDialog, useLongPress } from "./overlay
 import type { MenuItem } from "./overlays";
 import { createSnapshotRefreshController } from "./refreshCoordinator";
 import { TerminalView } from "./TerminalView";
-import { isVisualKeyboardOpen } from "./terminalViewport";
+import { isVisualKeyboardOpen, updateLayoutViewportBaseline } from "./terminalViewport";
 import {
   DEFAULT_TERMINAL_INPUT_BATCH_DELAY_MS,
   DEFAULT_TERMINAL_INPUT_TRANSPORT,
@@ -9378,10 +9378,18 @@ function useIsCompactLayout() {
 }
 
 function useVisualKeyboardOpen() {
+  const layoutViewportBaseline = useRef(
+    typeof window === "undefined"
+      ? null
+      : updateLayoutViewportBaseline(null, window.innerWidth, window.innerHeight),
+  );
   const [open, setOpen] = useState(() =>
     typeof window === "undefined"
       ? false
-      : isVisualKeyboardOpen(window.innerHeight, window.visualViewport),
+      : isVisualKeyboardOpen(
+          layoutViewportBaseline.current?.height ?? window.innerHeight,
+          window.visualViewport,
+        ),
   );
   useEffect(() => {
     const viewport = window.visualViewport;
@@ -9389,7 +9397,14 @@ function useVisualKeyboardOpen() {
       setOpen(false);
       return;
     }
-    const update = () => setOpen(isVisualKeyboardOpen(window.innerHeight, viewport));
+    const update = () => {
+      layoutViewportBaseline.current = updateLayoutViewportBaseline(
+        layoutViewportBaseline.current,
+        window.innerWidth,
+        window.innerHeight,
+      );
+      setOpen(isVisualKeyboardOpen(layoutViewportBaseline.current.height, viewport));
+    };
     update();
     window.addEventListener("resize", update);
     viewport.addEventListener("resize", update);

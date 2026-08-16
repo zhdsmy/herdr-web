@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { isVisualKeyboardOpen, observeTerminalViewport } from "./terminalViewport";
+import {
+  isVisualKeyboardOpen,
+  observeTerminalViewport,
+  updateLayoutViewportBaseline,
+} from "./terminalViewport";
 
 function createScheduler() {
   let nextHandle = 1;
@@ -35,6 +39,22 @@ describe("isVisualKeyboardOpen", () => {
 
   it("stays closed when visual viewport metrics are unavailable", () => {
     expect(isVisualKeyboardOpen(844, null)).toBe(false);
+  });
+});
+
+describe("updateLayoutViewportBaseline", () => {
+  it("keeps the full viewport height while the keyboard shrinks innerHeight", () => {
+    expect(updateLayoutViewportBaseline({ width: 390, height: 844 }, 390, 540)).toEqual({
+      width: 390,
+      height: 844,
+    });
+  });
+
+  it("resets the baseline when the viewport width changes", () => {
+    expect(updateLayoutViewportBaseline({ width: 390, height: 844 }, 844, 390)).toEqual({
+      width: 844,
+      height: 390,
+    });
   });
 });
 

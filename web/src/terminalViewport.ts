@@ -8,6 +8,22 @@ type ViewportScheduler = Pick<
   "cancelAnimationFrame" | "clearTimeout" | "requestAnimationFrame" | "setTimeout"
 >;
 
+export type LayoutViewportBaseline = {
+  width: number;
+  height: number;
+};
+
+export function updateLayoutViewportBaseline(
+  baseline: LayoutViewportBaseline | null,
+  width: number,
+  height: number,
+): LayoutViewportBaseline {
+  if (!baseline || baseline.width !== width) {
+    return { width, height };
+  }
+  return { width, height: Math.max(baseline.height, height) };
+}
+
 export function isVisualKeyboardOpen(
   layoutViewportHeight: number,
   visualViewport: VisualViewportGeometry | null | undefined,

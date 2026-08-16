@@ -33,6 +33,7 @@
   --app-bg: var(--crust);
   --top-chrome-bg: var(--mantle);
   --sidebar-bg: var(--top-chrome-bg);
+  --bottom-chrome-bg: var(--sidebar-bg);
   --term-bg: var(--crust);
   --row-hover: #20242f;
   --row-active: #252b39;
@@ -67,12 +68,16 @@
     monospace;
 
   font-family: var(--ui);
-  background: var(--app-bg);
+  background: var(--bottom-chrome-bg);
   color: var(--text);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+}
+
+:root:has(.app[data-detail="true"]) {
+  --bottom-chrome-bg: color-mix(in srgb, var(--mantle) 94%, black);
 }
 
 * {
@@ -99,6 +104,7 @@ body,
   height: 100dvh;
   margin: 0;
   overflow: hidden;
+  background: var(--bottom-chrome-bg);
   overscroll-behavior: none;
 }
 
@@ -145,13 +151,9 @@ button {
   z-index: 5;
   inset: auto 0 0;
   height: var(--viewport-inset-bottom);
-  background: var(--sidebar-bg);
+  background: var(--bottom-chrome-bg);
   content: "";
   pointer-events: none;
-}
-
-.app[data-detail="true"]::after {
-  background: color-mix(in srgb, var(--mantle) 94%, black);
 }
 
 /* Android's root view already applies system bar and display cutout insets. */
