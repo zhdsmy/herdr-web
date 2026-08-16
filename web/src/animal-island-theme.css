@@ -571,6 +571,10 @@ body .app .sec > .pane-row[data-active="true"] {
   font-weight: 700;
 }
 
+.grp-space-chevron {
+  color: var(--animal-text-color-secondary);
+}
+
 .grp-space-line,
 .tab-div {
   background: var(--animal-border-color-light);
@@ -596,6 +600,10 @@ body .app .sec > .pane-row[data-active="true"] {
 
 .agent-icon {
   border-radius: 12px;
+}
+
+.agent-icon-claude {
+  color: #e59266;
 }
 
 .agent-pin-indicator {
@@ -1059,6 +1067,10 @@ body .app .sec > .pane-row[data-active="true"] {
   color: var(--animal-body-text);
 }
 
+.note-body-preview-empty {
+  color: var(--animal-text-color-secondary);
+}
+
 .note-body-preview h1,
 .note-body-preview h2,
 .note-body-preview h3 {
@@ -1204,13 +1216,12 @@ body .app .sec > .pane-row[data-active="true"] {
 
 .modal-title {
   align-self: flex-start;
-  padding: 9px 28px 9px 32px;
-  color: #fffef5;
-  background: var(--animal-primary-color);
-  clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 0.03em;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  clip-path: none;
+  font-size: inherit;
+  letter-spacing: normal;
 }
 
 .modal-close {
@@ -1463,7 +1474,7 @@ body .app .sec > .pane-row[data-active="true"] {
   box-shadow: none;
 }
 
-.backend-toggle span {
+.backend-toggle > span:first-child {
   top: 50%;
   border: 2px solid var(--animal-border-color);
   background: var(--animal-bg-color);
@@ -1471,15 +1482,19 @@ body .app .sec > .pane-row[data-active="true"] {
   transform: translateY(-50%);
 }
 
-.backend-toggle[data-on="true"] {
+.backend-toggle > span:last-child {
+  display: none;
+}
+
+.backend-toggle[aria-checked="true"] {
   border-color: var(--animal-success-color-active);
   background: var(--animal-success-color);
 }
 
-.backend-toggle[data-on="true"] span {
+.backend-toggle[aria-checked="true"] > span:first-child {
   border-color: var(--animal-success-color-active);
   background: var(--animal-bg-color);
-  transform: translate(16px, -50%);
+  transform: translateY(-50%);
 }
 
 .backend-form,
@@ -1642,11 +1657,6 @@ body .app .sec > .pane-row[data-active="true"] {
   .modal-close {
     top: 30px;
     right: 28px;
-  }
-
-  .modal-title {
-    padding-inline: 20px 24px;
-    font-size: 18px;
   }
 
   .settings-area-list {

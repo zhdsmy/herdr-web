@@ -1,3 +1,4 @@
+import { Button, Title } from "animal-island-ui";
 import { Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
@@ -97,7 +98,11 @@ export function LaunchDialog({
           }
         }}
       >
-        <div className="modal-title">{launchTitle(target)}</div>
+        <div className="modal-title">
+          <Title color="app-teal" size="middle">
+            {launchTitle(target)}
+          </Title>
+        </div>
         <div className="launch-grid" role="radiogroup" aria-label="Launch type">
           {options.length === 0 ? (
             <div className="launch-empty mono" role="status">
@@ -170,16 +175,17 @@ export function LaunchDialog({
           />
         </label>
         <div className="modal-actions">
-          <button type="button" className="btn" onClick={onCancel}>
+          <Button htmlType="button" className="btn" onClick={onCancel}>
             Cancel
-          </button>
-          <button
-            type="submit"
+          </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
             className="btn btn-primary"
             disabled={busy || !title.trim() || options.length === 0}
           >
             Create
-          </button>
+          </Button>
         </div>
       </form>
     </div>

@@ -1,3 +1,4 @@
+import { Button, Title } from "animal-island-ui";
 import {
   Activity,
   Archive,
@@ -7194,9 +7195,9 @@ function Switcher({
                   : ""}
             </span>
             {bridgeBlocked ? (
-              <button type="button" className="btn" onClick={onBackendSettings}>
+              <Button htmlType="button" className="btn" onClick={onBackendSettings}>
                 Settings
-              </button>
+              </Button>
             ) : null}
           </div>
         ) : (
@@ -7749,7 +7750,11 @@ export function QuickPaneNoteDialog({
           trapDialogFocus(event);
         }}
       >
-        <div className="modal-title">Add note</div>
+        <div className="modal-title">
+          <Title color="app-teal" size="middle">
+            Add note
+          </Title>
+        </div>
         <div className="modal-message quick-note-target">Attached to {targetLabel}</div>
         <label className="field-label">
           <span>Title</span>
@@ -7778,23 +7783,28 @@ export function QuickPaneNoteDialog({
             />
           </label>
         ) : (
-          <button
+          <Button
             className="btn quick-note-expand"
-            type="button"
+            htmlType="button"
             disabled={busy}
             aria-expanded="false"
             onClick={() => setBodyExpanded(true)}
           >
             Add body
-          </button>
+          </Button>
         )}
         <div className="modal-actions">
-          <button type="button" className="btn" disabled={busy} onClick={cancel}>
+          <Button htmlType="button" className="btn" disabled={busy} onClick={cancel}>
             Cancel
-          </button>
-          <button type="submit" className="btn btn-primary" disabled={busy || !title.trim()}>
+          </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
+            className="btn btn-primary"
+            disabled={busy || !title.trim()}
+          >
             Create
-          </button>
+          </Button>
         </div>
       </form>
     </div>

@@ -1,3 +1,4 @@
+import { Button } from "animal-island-ui";
 import {
   Copy,
   ExternalLink,
@@ -1390,19 +1391,32 @@ function MobileSelectionActions({
     >
       <div className="terminal-selection-url mono">{action.url}</div>
       <div className="terminal-selection-actions">
-        <button type="button" className="btn btn-primary" onClick={onOpen}>
-          <ExternalLink size={15} />
+        <Button
+          htmlType="button"
+          type="primary"
+          className="btn btn-primary"
+          icon={<ExternalLink size={15} />}
+          onClick={onOpen}
+        >
           Open
-        </button>
-        <button type="button" className="btn" onClick={onCopyUrl}>
-          <Link size={15} />
+        </Button>
+        <Button
+          htmlType="button"
+          className="btn"
+          icon={<Link size={15} />}
+          onClick={onCopyUrl}
+        >
           Copy URL
-        </button>
+        </Button>
         {canCopyTextSeparately ? (
-          <button type="button" className="btn" onClick={onCopyText}>
-            <Copy size={15} />
+          <Button
+            htmlType="button"
+            className="btn"
+            icon={<Copy size={15} />}
+            onClick={onCopyText}
+          >
             Copy text
-          </button>
+          </Button>
         ) : null}
         <button type="button" className="icon-btn" aria-label="Close" title="Close" onClick={onClose}>
           <X size={15} />

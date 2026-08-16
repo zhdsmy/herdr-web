@@ -1,3 +1,4 @@
+import { Button, Title } from "animal-island-ui";
 import type * as React from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
@@ -183,7 +184,11 @@ export function RenameDialog({
           }
         }}
       >
-        <div className="modal-title">{title}</div>
+        <div className="modal-title">
+          <Title color="app-teal" size="middle">
+            {title}
+          </Title>
+        </div>
         <input
           ref={inputRef}
           className="field"
@@ -195,16 +200,28 @@ export function RenameDialog({
         />
         <div className="modal-actions">
           {onClear ? (
-            <button type="button" className="btn btn-clear" disabled={busy} onClick={onClear}>
+            <Button
+              htmlType="button"
+              className="btn btn-clear"
+              danger
+              ghost
+              disabled={busy}
+              onClick={onClear}
+            >
               Clear name
-            </button>
+            </Button>
           ) : null}
-          <button type="button" className="btn" onClick={onCancel}>
+          <Button htmlType="button" className="btn" onClick={onCancel}>
             Cancel
-          </button>
-          <button type="submit" className="btn btn-primary" disabled={busy || !value.trim()}>
+          </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
+            className="btn btn-primary"
+            disabled={busy || !value.trim()}
+          >
             Save
-          </button>
+          </Button>
         </div>
       </form>
     </div>
@@ -255,20 +272,26 @@ export function ConfirmDialog({
           }
         }}
       >
-        <div className="modal-title">{title}</div>
+        <div className="modal-title">
+          <Title color="app-teal" size="middle">
+            {title}
+          </Title>
+        </div>
         {message ? <div className="modal-message">{message}</div> : null}
         <div className="modal-actions">
-          <button type="button" className="btn" onClick={onCancel}>
+          <Button htmlType="button" className="btn" onClick={onCancel}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            htmlType="button"
+            type="primary"
             className="btn btn-danger"
+            danger
             disabled={busy}
             onClick={onConfirm}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

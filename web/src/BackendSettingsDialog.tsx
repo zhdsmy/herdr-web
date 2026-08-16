@@ -1,6 +1,7 @@
 import { hexToHsva, hsvaToHex } from "@uiw/color-convert";
 import type { HsvaColor } from "@uiw/color-convert";
 import Wheel from "@uiw/react-color-wheel";
+import { Button, Switch, Title } from "animal-island-ui";
 import {
   Plus,
   RotateCcw,
@@ -325,7 +326,11 @@ export function BackendSettingsDialog({
         >
           <X size={15} />
         </button>
-        <div id={titleId} className="modal-title">Settings</div>
+        <div id={titleId} className="modal-title">
+          <Title color="app-teal" size="middle">
+            Settings
+          </Title>
+        </div>
         <div className="backend-layout">
           <div className="settings-area-list" role="tablist" aria-label="Settings areas">
             {areas.map(({ id, label, icon: Icon }) => (
@@ -464,26 +469,34 @@ export function BackendSettingsDialog({
                 {editingBackend ? (
                   <div className="modal-actions">
                     {canDelete ? (
-                      <button type="button" className="btn btn-danger" disabled={busy} onClick={deleteBackend}>
+                      <Button
+                        htmlType="button"
+                        type="primary"
+                        className="btn btn-danger"
+                        danger
+                        disabled={busy}
+                        onClick={deleteBackend}
+                      >
                         Delete
-                      </button>
+                      </Button>
                     ) : null}
-                    <button
-                      type="button"
+                    <Button
+                      htmlType="button"
                       className="btn"
                       disabled={busy || !form.baseUrl.trim()}
                       onClick={testBackend}
                     >
                       Test
-                    </button>
-                    <button
-                      type="button"
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      type="primary"
                       className="btn btn-primary"
                       disabled={busy || !form.baseUrl.trim()}
                       onClick={() => void saveBackend()}
                     >
                       Save
-                    </button>
+                    </Button>
                   </div>
                 ) : null}
               </>
@@ -1306,18 +1319,13 @@ function BackendToggleRow({
           <small>{subtitle}</small>
         </span>
       </button>
-      <button
+      <Switch
         className="backend-toggle"
-        type="button"
-        role="switch"
-        aria-checked={enabled}
+        checked={enabled}
+        size="small"
         aria-label={toggleLabel}
-        title={toggleLabel}
-        data-on={enabled ? "true" : undefined}
-        onClick={onToggle}
-      >
-        <span aria-hidden="true" />
-      </button>
+        onChange={onToggle}
+      />
     </div>
   );
 }

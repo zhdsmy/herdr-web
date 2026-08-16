@@ -109,16 +109,16 @@ const LEGACY_STORE_KEY = "herdrWeb.bridgeBackends.v1";
 const NOTE_DRAFT_STORAGE_PREFIX = "herdr-web:note-draft:v1:";
 const STORE_VERSION = 2;
 const APP_MIN_WEB_COMPAT = 1;
-export const SAME_ORIGIN_BRIDGE_COLOR = "#b4befe";
+export const SAME_ORIGIN_BRIDGE_COLOR = "#19c8b9";
 const BACKEND_COLOR_PALETTE = [
-  "#89b4fa",
-  "#a6e3a1",
-  "#f9e2af",
-  "#fab387",
-  "#94e2d5",
-  "#f38ba8",
-  "#cba6f7",
-  "#74c7ec",
+  "#82d5bb",
+  "#8ac68a",
+  "#f7cd67",
+  "#e59266",
+  "#f8a6b2",
+  "#e05a5a",
+  "#b77dee",
+  "#d1da49",
 ] as const;
 
 const BridgeContext = createContext<BridgeManager | null>(null);

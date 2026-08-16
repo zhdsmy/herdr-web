@@ -7,6 +7,7 @@ import {
   capabilityRetryDelayMs,
   configuredBridgeConnectionKey,
   duplicateBackend,
+  fallbackBackendColor,
   loadBackendStore,
   normalizeBridgeBaseUrl,
   normalizeBackendColor,
@@ -14,7 +15,9 @@ import {
   parseCapabilities,
   probeBridgeBaseUrl,
   removeNoteDraftsForBridgeConnection,
+  SAME_ORIGIN_BRIDGE_COLOR,
   SAME_ORIGIN_BRIDGE_ID,
+  suggestBackendColor,
 } from "./bridge";
 
 afterEach(() => {
@@ -52,9 +55,34 @@ describe("bridge URL normalization", () => {
 describe("backend colors", () => {
   it("normalizes six-digit hex colors", () => {
     expect(normalizeBackendColor("#A1b2C3")).toBe("#a1b2c3");
-    expect(normalizeBackendColor(" #89B4FA ")).toBe("#89b4fa");
+    expect(normalizeBackendColor(" #82D5BB ")).toBe("#82d5bb");
     expect(normalizeBackendColor("#fff")).toBeNull();
     expect(normalizeBackendColor("red")).toBeNull();
+  });
+});
+
+describe("Animal Island backend colors", () => {
+  const palette = new Set([
+    "#82d5bb",
+    "#8ac68a",
+    "#f7cd67",
+    "#e59266",
+    "#f8a6b2",
+    "#e05a5a",
+    "#b77dee",
+    "#d1da49",
+  ]);
+
+  it("uses the primary theme color for the same-origin bridge", () => {
+    expect(SAME_ORIGIN_BRIDGE_COLOR).toBe("#19c8b9");
+  });
+
+  it("keeps generated backend colors on the theme palette", () => {
+    expect(palette).toContain(fallbackBackendColor("bridge-a"));
+    expect(suggestBackendColor([], "bridge-b")).toBe("#82d5bb");
+    expect(
+      suggestBackendColor([{ id: "a", name: "A", baseUrl: "http://a", color: "#82d5bb" }]),
+    ).toBe("#8ac68a");
   });
 });
 
