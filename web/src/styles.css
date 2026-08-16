@@ -140,6 +140,20 @@ button {
   pointer-events: none;
 }
 
+.app::after {
+  position: fixed;
+  z-index: 5;
+  inset: auto 0 0;
+  height: var(--viewport-inset-bottom);
+  background: var(--sidebar-bg);
+  content: "";
+  pointer-events: none;
+}
+
+.app[data-detail="true"]::after {
+  background: color-mix(in srgb, var(--mantle) 94%, black);
+}
+
 /* Android's root view already applies system bar and display cutout insets. */
 .app[data-native-android="true"] {
   --viewport-inset-top: var(--content-inset-top);
