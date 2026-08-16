@@ -13,12 +13,12 @@
     var(--animal-font-family), "Nunito", "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
     sans-serif;
   --animal-mono:
-    "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC",
-    "PingFang SC", monospace;
+    "Noto Sans Mono Variable", "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular",
+    Consolas, "Noto Sans SC", "PingFang SC", monospace;
   --animal-content-bg: rgb(247 243 223);
-  --animal-terminal-bg: #2b2118;
-  --animal-terminal-surface: #3d3028;
-  --animal-terminal-text: #e8d5bc;
+  --animal-terminal-bg: #fffaf0;
+  --animal-terminal-surface: #f0e8d8;
+  --animal-terminal-text: #5b452f;
   --animal-body-text: #725d42;
   --animal-muted-text: #8a7b66;
   --animal-focus-yellow: #ffcc00;
@@ -747,11 +747,11 @@ body .app .sec > .pane-row[data-active="true"] {
 }
 
 .terminal-overlay {
-  border: 1.5px solid #665342;
+  border: 1.5px solid var(--animal-border-color);
   border-radius: 20px;
   color: var(--animal-terminal-text);
-  background: rgb(61 48 40 / 0.94);
-  box-shadow: 0 3px 0 #1f1812;
+  background: rgb(240 232 216 / 0.96);
+  box-shadow: 0 3px 0 #d4c9b4;
 }
 
 .terminal-overlay::before {
@@ -841,6 +841,27 @@ body .app .sec > .pane-row[data-active="true"] {
 .term-key-panel,
 .term-input-row {
   gap: 6px;
+}
+
+.term-key-group {
+  padding-right: var(--mobile-key-padding-x);
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 16px), transparent);
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 16px), transparent);
+}
+
+.term-key-actions {
+  position: relative;
+  border-left: 0;
+}
+
+.term-key-actions::before {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: 1px;
+  background: var(--animal-border-color);
+  content: "";
 }
 
 .term-key,
@@ -1386,7 +1407,14 @@ body .app .sec > .pane-row[data-active="true"] {
 /* Settings */
 
 .backend-modal {
+  overflow: hidden;
   background: var(--animal-content-bg);
+}
+
+.backend-layout {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .settings-area-list {
@@ -1422,6 +1450,10 @@ body .app .sec > .pane-row[data-active="true"] {
 }
 
 .settings-panel {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 4px 4px 0;
   background: transparent;
 }
 
@@ -1465,6 +1497,10 @@ body .app .sec > .pane-row[data-active="true"] {
 .backend-row-text small,
 .backend-row-action small {
   color: var(--animal-text-color-secondary);
+}
+
+.backend-note {
+  padding: 8px 12px;
 }
 
 .backend-toggle {
@@ -1647,7 +1683,17 @@ body .app .sec > .pane-row[data-active="true"] {
   }
 
   .backend-modal {
-    width: 96vw;
+    width: calc(100vw - 20px);
+    max-height: min(88dvh, 760px);
+    padding: 38px 18px 18px;
+    border: 1.5px solid var(--animal-border-color-light);
+    border-radius: 32px;
+    clip-path: none;
+  }
+
+  .backend-layout {
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 10px;
   }
 
   .launch-grid {
@@ -1660,17 +1706,46 @@ body .app .sec > .pane-row[data-active="true"] {
   }
 
   .settings-area-list {
+    min-height: 52px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    padding: 2px 0 8px;
     border-right: 0;
     border-bottom: 1.5px solid var(--animal-border-color-light);
     background: transparent;
+    scrollbar-width: none;
+  }
+
+  .settings-area-list::-webkit-scrollbar {
+    display: none;
   }
 
   .settings-area-tab {
+    width: auto;
+    min-width: max-content;
+    flex: 0 0 auto;
+    padding-inline: 14px;
     border-radius: 50px;
   }
 
   .settings-area-tab[data-active="true"] {
     box-shadow: 0 2px 0 rgb(80 185 171 / 0.34);
+  }
+
+  .settings-panel {
+    padding: 2px 2px 8px;
+    scrollbar-gutter: stable;
+  }
+
+  .backend-modal .modal-actions {
+    position: sticky;
+    z-index: 2;
+    bottom: 0;
+    margin-top: 14px;
+    padding: 12px 2px 4px;
+    background: linear-gradient(to bottom, transparent, var(--animal-content-bg) 12px);
   }
 
   .backend-list,
@@ -1716,5 +1791,25 @@ body .app .sec > .pane-row[data-active="true"] {
   .modal {
     width: 97vw;
     padding: 36px 18px 24px;
+  }
+
+  .backend-modal {
+    width: calc(100vw - 16px);
+    padding: 36px 16px 18px;
+    border-radius: 30px;
+  }
+
+  .backend-modal .modal-close {
+    right: 18px;
+  }
+
+  .backend-modal .modal-actions {
+    gap: 6px;
+  }
+
+  .backend-modal .modal-actions .btn {
+    min-width: 0;
+    flex: 1 1 0;
+    padding-inline: 10px;
   }
 }

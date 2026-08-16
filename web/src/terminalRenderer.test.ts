@@ -45,8 +45,9 @@ describe("GhosttyRenderer", () => {
     const renderer = new GhosttyRenderer();
     const mount = renderer.mount(document.createElement("div"));
 
-    await vi.waitFor(() => expect(load).toHaveBeenCalledOnce());
-    expect(load).toHaveBeenCalledWith('13px "Noto Sans SC"');
+    await vi.waitFor(() => expect(load).toHaveBeenCalledTimes(2));
+    expect(load).toHaveBeenNthCalledWith(1, '13px "Noto Sans Mono Variable"');
+    expect(load).toHaveBeenNthCalledWith(2, '13px "Noto Sans SC"', "中文");
     renderer.dispose();
     const rejectedMount = expect(mount).rejects.toThrow("terminal renderer disposed");
     fontLoad.resolve([]);

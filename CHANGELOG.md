@@ -14,8 +14,8 @@
 
 - Applied the Animal Island UI visual system across the entire Web app, including workspace,
   terminal, notes, settings, dialogs, menus, feedback, safe areas, and mobile controls.
-- Changed UI typography to the theme-bundled Nunito and Noto Sans SC fonts, and changed terminal
-  typography and colors to the theme's warm CodeBlock direction.
+- Changed UI typography to the theme-bundled Nunito and Noto Sans SC fonts, added self-hosted Noto
+  Sans Mono for monospaced surfaces, and moved terminals to a warm light palette.
 - Refined the workspace chrome with denser segmented controls, grouped list cells, a quieter hierarchy selection, and compact mobile terminal actions.
 
 - Preserved the iOS and iPadOS safe-area and keyboard geometry while replacing the previous
@@ -24,6 +24,10 @@
   without creating deployment backups.
 
 ### Fixed
+
+- Kept compact Settings tabs, content, and actions inside a safe rounded scrolling panel, and made
+  the horizontally scrollable mobile terminal key strip end with a visual fade instead of a hard
+  clipped key.
 
 - Fixed browser layouts overlapping top and bottom safe areas without duplicating Android system
   bar insets, and matched the browser top safe area to the app header.

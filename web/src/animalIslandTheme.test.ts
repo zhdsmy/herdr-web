@@ -50,12 +50,10 @@ function sourceClasses(source: string) {
 // These classes only provide layout, inherit from a themed parent/composed class, or stay hidden.
 const inheritedOrStructuralClasses = new Set([
   "backend-color-actions",
-  "backend-layout",
   "backend-row-main",
   "brand-title",
   "bridge-chip-label",
   "host-scope",
-  "modal-actions",
   "note-editor-actions",
   "note-editor-toolbar-left",
   "notes-list-item-body",
@@ -74,8 +72,6 @@ const inheritedOrStructuralClasses = new Set([
   "tab-line",
   "tab-split",
   "tabgrp",
-  "term-key-actions",
-  "term-key-group",
   "term-key-icon",
   "terminal-file-input",
   "terminal-selection-actions",
@@ -90,8 +86,15 @@ describe("Animal Island theme contract", () => {
       packages: Record<string, { version?: string }>;
     };
 
+    expect(packageJson.dependencies["@fontsource-variable/noto-sans-mono"]).toBe("5.3.0");
     expect(packageJson.dependencies["animal-island-ui"]).toBe("1.6.0");
+    expect(packageLock.packages["node_modules/@fontsource-variable/noto-sans-mono"]?.version).toBe(
+      "5.3.0",
+    );
     expect(packageLock.packages["node_modules/animal-island-ui"]?.version).toBe("1.6.0");
+    expect(
+      productionSource.match(/import\s+["']@fontsource-variable\/noto-sans-mono["']/gu),
+    ).toHaveLength(1);
     expect(productionSource.match(/import\s+["']animal-island-ui\/style["']/gu)).toHaveLength(1);
   });
 
@@ -106,21 +109,23 @@ describe("Animal Island theme contract", () => {
     expect(checkedSwitchRule?.[1]).toContain("transform: translateY(-50%);");
   });
 
-  it("keeps the bundled UI fonts and warm terminal typography", () => {
+  it("keeps the bundled UI fonts and self-hosted matching terminal typography", () => {
     const terminalRenderer = readWebFile("src", "terminalRenderer.ts");
     const compactThemeCss = themeCss.replace(/\s+/gu, " ");
     const compactTerminalRenderer = terminalRenderer.replace(/\s+/gu, " ");
     const monoStack =
-      '"SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
+      '"Noto Sans Mono Variable", "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
 
     expect(compactThemeCss).toContain(
       '--animal-font: var(--animal-font-family), "Nunito", "Noto Sans SC", "PingFang SC",',
     );
     expect(compactThemeCss).toContain(`--animal-mono: ${monoStack};`);
     expect(compactTerminalRenderer).toContain(`const TERMINAL_FONT_FAMILY = '${monoStack}';`);
-    expect(terminalRenderer).toContain('const TERMINAL_BACKGROUND = "#2b2118";');
-    expect(terminalRenderer).toContain('foreground: "#e8d5bc"');
-    expect(terminalRenderer).toContain('cursor: "#ffcc00"');
+    expect(themeCss).toContain("--animal-terminal-bg: #fffaf0;");
+    expect(terminalRenderer).toContain('const TERMINAL_BACKGROUND = "#fffaf0";');
+    expect(terminalRenderer).toContain('foreground: "#5b452f"');
+    expect(terminalRenderer).toContain('cursor: "#19c8b9"');
+    expect(terminalRenderer).toContain('selectionBackground: "#bfe9e4"');
   });
 
   it("keeps PWA chrome aligned with the theme", () => {
@@ -139,9 +144,9 @@ describe("Animal Island theme contract", () => {
     const packageFiles = `${readWebFile("package.json")}\n${readWebFile("package-lock.json")}`;
     const themedProduction = `${productionSource}\n${baseCss}\n${themeCss}`;
 
-    expect(packageFiles).not.toMatch(/@fontsource|Geist/iu);
+    expect(packageFiles).not.toMatch(/@fontsource(?:-variable)?\/geist|Geist/iu);
     expect(themedProduction).not.toMatch(
-      /Geist|#08090c|#111318|#0a84ff|#89b4fa|#b4befe|#a6e3a1|#f9e2af|#fab387|#94e2d5|#f38ba8|#cba6f7|#74c7ec/iu,
+      /Geist|#08090c|#111318|#2b2118|#e8d5bc|#0a84ff|#89b4fa|#b4befe|#a6e3a1|#f9e2af|#fab387|#94e2d5|#f38ba8|#cba6f7|#74c7ec/iu,
     );
   });
 

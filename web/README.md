@@ -16,7 +16,8 @@ npm run build
 
 The Web entry imports the official `animal-island-ui/style` stylesheet once, followed by the
 application compatibility layer in `src/animal-island-theme.css`. Keep new Web surfaces on the
-`--animal-*` tokens and preserve the Nunito, Noto Sans SC, and warm terminal typography stacks.
+`--animal-*` tokens and preserve the Nunito, Noto Sans SC, self-hosted Noto Sans Mono, and warm
+light terminal typography stacks.
 See [the attribution and non-commercial license notice](../docs/animal-island-theme.md).
 
 The production build is written to `web/dist/` and served by `herdr-web-bridge` through

@@ -1,3 +1,4 @@
+import "@fontsource-variable/noto-sans-mono";
 import "animal-island-ui/style";
 import { Cursor } from "animal-island-ui";
 import { StrictMode } from "react";

@@ -28,9 +28,9 @@ import type {
 } from "./mobileTerminalPrefs";
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
-const TERMINAL_BACKGROUND = "#2b2118";
+const TERMINAL_BACKGROUND = "#fffaf0";
 const TERMINAL_FONT_FAMILY =
-  '"SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
+  '"Noto Sans Mono Variable", "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
 const TOUCH_SELECTION_LONG_PRESS_MS = 600;
 const TOUCH_SELECTION_TOLERANCE_PX = 10;
@@ -154,7 +154,14 @@ export class GhosttyRenderer implements TerminalRenderer {
       throw new Error("terminal renderer disposed");
     }
 
-    await document.fonts?.load(`${this.#fontSizePx}px "Noto Sans SC"`).catch(() => []);
+    if (document.fonts) {
+      await Promise.all([
+        document.fonts
+          .load(`${this.#fontSizePx}px "Noto Sans Mono Variable"`)
+          .catch(() => []),
+        document.fonts.load(`${this.#fontSizePx}px "Noto Sans SC"`, "中文").catch(() => []),
+      ]);
+    }
     if (this.#disposed) {
       throw new Error("terminal renderer disposed");
     }
@@ -169,25 +176,25 @@ export class GhosttyRenderer implements TerminalRenderer {
       smoothScrollDuration: 0,
       theme: {
         background: TERMINAL_BACKGROUND,
-        foreground: "#e8d5bc",
-        cursor: "#ffcc00",
-        selectionBackground: "#665342",
+        foreground: "#5b452f",
+        cursor: "#19c8b9",
+        selectionBackground: "#bfe9e4",
         black: "#3d3028",
-        red: "#e06c75",
-        green: "#a8d4a0",
-        yellow: "#e8c87a",
-        blue: "#80c0e0",
-        magenta: "#d4a0e0",
-        cyan: "#82d5bb",
-        white: "#e8d5bc",
-        brightBlack: "#6b5e50",
-        brightRed: "#f08b89",
-        brightGreen: "#c3e2ae",
-        brightYellow: "#f0d990",
-        brightBlue: "#9ed2e8",
-        brightMagenta: "#e3b9e8",
-        brightCyan: "#a6e0cf",
-        brightWhite: "#fff1de",
+        red: "#c64f4f",
+        green: "#4e8e2f",
+        yellow: "#8a6b00",
+        blue: "#267aa0",
+        magenta: "#8c5ab2",
+        cyan: "#137f77",
+        white: "#8a7b66",
+        brightBlack: "#8a7b66",
+        brightRed: "#e05a5a",
+        brightGreen: "#6fba2c",
+        brightYellow: "#b08a00",
+        brightBlue: "#3a9abf",
+        brightMagenta: "#b77dee",
+        brightCyan: "#19a99d",
+        brightWhite: "#5b452f",
       },
     });
     const fitAddon = new FitAddon();
