@@ -1473,6 +1473,7 @@ body .app .sec > .pane-row[data-active="true"] {
 }
 
 .backend-list {
+  padding: 8px;
   border: 1.5px solid var(--animal-border-color-light);
   border-radius: 20px;
   background: var(--animal-bg-color);
@@ -1808,7 +1809,6 @@ body .app .sec > .pane-row[data-active="true"] {
   .backend-list {
     max-height: none;
     overflow-y: visible;
-    padding-right: 0;
   }
 
   .backend-modal .modal-actions {

@@ -12,6 +12,8 @@
 
 ### Changed
 
+- Redesigned the Herdr Web and PWA icon as a high-contrast medallion with system-aware light and
+  dark variants.
 - Applied the Animal Island UI visual system across the entire Web app, including workspace,
   terminal, notes, settings, dialogs, menus, feedback, safe areas, and mobile controls.
 - Changed UI typography to the theme-bundled Nunito and Noto Sans SC fonts, added self-hosted Noto

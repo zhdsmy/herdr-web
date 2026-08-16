@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -141,7 +141,10 @@ describe("Animal Island theme contract", () => {
       ".tabbar-scroll { background: transparent; box-shadow: none; }",
     );
     expect(compactThemeCss).toContain(
-      ".backend-list { max-height: none; overflow-y: visible; padding-right: 0; }",
+      ".backend-list { max-height: none; overflow-y: visible; }",
+    );
+    expect(compactThemeCss).toContain(
+      ".backend-list { padding: 8px; border: 1.5px solid var(--animal-border-color-light);",
     );
     expect(compactThemeCss).toContain(".backend-form { padding: 14px; }");
     expect(compactThemeCss).toContain(
@@ -152,14 +155,24 @@ describe("Animal Island theme contract", () => {
     );
   });
 
-  it("keeps PWA chrome aligned with the theme", () => {
+  it("keeps PWA chrome and icons aligned with the theme", () => {
     const indexHtml = readWebFile("index.html");
+    const compactIndexHtml = indexHtml.replace(/\s+/gu, " ");
+    const logoSvg = readWebFile("public", "herdr-logo.svg");
     const manifest = JSON.parse(readWebFile("public", "manifest.json")) as {
       background_color: string;
       theme_color: string;
     };
 
     expect(indexHtml).toContain('<meta name="theme-color" content="#19c8b9" />');
+    expect(compactIndexHtml).toContain(
+      '<link rel="icon" href="/herdr-logo-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />',
+    );
+    expect(compactIndexHtml).toContain(
+      '<link rel="apple-touch-icon" href="/herdr-logo-dark-180.png" media="(prefers-color-scheme: dark)" />',
+    );
+    expect(logoSvg).toContain("@media (prefers-color-scheme: dark)");
+    expect(existsSync(join(webRoot, "public", "herdr-logo-dark-180.png"))).toBe(true);
     expect(manifest.theme_color).toBe("#19c8b9");
     expect(manifest.background_color).toBe("#f8f8f0");
   });
