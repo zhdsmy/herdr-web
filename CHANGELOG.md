@@ -28,7 +28,8 @@
 
 ### Fixed
 
-- Served cache-busted 1024 px iOS home-screen icons instead of upscaling the 180 px preview asset.
+- Served one cache-busted native-size iOS home-screen icon and kept manifest icon choices raster-only
+  to prevent a sharp preview being replaced by a blurry SVG fallback.
 - Matched Safari's top browser chrome to the compact Herdr header without changing the bottom chrome.
 - Removed the compact tab-strip divider, reset touch-sticky refresh highlights, and improved spacing
   around Bridge fields and agent sections.
