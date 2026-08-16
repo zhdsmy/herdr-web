@@ -135,13 +135,20 @@ describe("Animal Island theme contract", () => {
       ".term-stage-command:disabled { border-color: var(--animal-border-color);",
     );
     expect(compactThemeCss).toContain(
-      ".tabbar { min-height: 46px; border-bottom-color: rgb(255 255 255 / 0.18); background: var(--animal-primary-color); }",
+      ".tabbar { min-height: 46px; border-bottom: 0; background: var(--animal-primary-color); }",
     );
     expect(compactThemeCss).toContain(
       ".tabbar-scroll { background: transparent; box-shadow: none; }",
     );
     expect(compactThemeCss).toContain(
       ".backend-list { max-height: none; overflow-y: visible; padding-right: 0; }",
+    );
+    expect(compactThemeCss).toContain(".backend-form { padding: 14px; }");
+    expect(compactThemeCss).toContain(
+      '.sec[data-sidebar-section="content"] > .sec-head + .pane-row { margin-top: 8px; }',
+    );
+    expect(compactThemeCss).toContain(
+      "@media (hover: none) { .sb-head .icon-btn:hover, .stage-bar .icon-btn:hover, .notes-head .icon-btn:hover { border-color: rgb(255 254 245 / 0.42); color: #fffef5; background: rgb(255 254 245 / 0.12); box-shadow: none; transform: none; }",
     );
   });
 

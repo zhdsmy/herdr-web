@@ -427,6 +427,10 @@ select:focus-visible {
   padding-inline: 7px;
 }
 
+.sec[data-sidebar-section="content"] > .sec-head + .pane-row {
+  margin-top: 8px;
+}
+
 .sec-label {
   padding: 5px 18px 5px 26px;
   color: var(--animal-body-text);
@@ -1548,6 +1552,10 @@ body .app .sec > .pane-row[data-active="true"] {
   box-shadow: none;
 }
 
+.backend-form {
+  padding: 14px;
+}
+
 .settings-section-flat {
   border: 0;
   background: transparent;
@@ -1627,6 +1635,27 @@ body .app .sec > .pane-row[data-active="true"] {
   }
 }
 
+@media (hover: none) {
+  .sb-head .icon-btn:hover,
+  .stage-bar .icon-btn:hover,
+  .notes-head .icon-btn:hover {
+    border-color: rgb(255 254 245 / 0.42);
+    color: #fffef5;
+    background: rgb(255 254 245 / 0.12);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .sb-head .icon-btn:active,
+  .stage-bar .icon-btn:active,
+  .notes-head .icon-btn:active {
+    border-color: var(--animal-focus-yellow);
+    color: var(--animal-text-color);
+    background: var(--animal-warning-color);
+    box-shadow: 0 3px 0 var(--animal-warning-color-active);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .app,
   .modal,
@@ -1676,7 +1705,7 @@ body .app .sec > .pane-row[data-active="true"] {
 
   .tabbar {
     min-height: 46px;
-    border-bottom-color: rgb(255 255 255 / 0.18);
+    border-bottom: 0;
     background: var(--animal-primary-color);
   }
 

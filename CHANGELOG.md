@@ -27,6 +27,8 @@
 
 ### Fixed
 
+- Removed the compact tab-strip divider, reset touch-sticky refresh highlights, and improved spacing
+  around Bridge fields and agent sections.
 - Kept compact Settings tabs, content, and actions inside a safe rounded scrolling panel, and made
   the horizontally scrollable mobile terminal key strip end with a visual fade instead of a hard
   clipped key.
