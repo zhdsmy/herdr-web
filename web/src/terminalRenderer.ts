@@ -28,9 +28,9 @@ import type {
 } from "./mobileTerminalPrefs";
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
-const TERMINAL_BACKGROUND = "#0d0f14";
+const TERMINAL_BACKGROUND = "#08090c";
 const TERMINAL_FONT_FAMILY =
-  '"Geist Mono Variable", ui-monospace, "SFMono-Regular", "PingFang SC", "Microsoft YaHei", monospace';
+  '"Geist Mono Variable", "PingFang SC", "PingFang TC", ui-monospace, "SFMono-Regular", "Microsoft YaHei", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
 const TOUCH_SELECTION_LONG_PRESS_MS = 600;
 const TOUCH_SELECTION_TOLERANCE_PX = 10;

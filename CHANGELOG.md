@@ -13,7 +13,8 @@
 ### Changed
 
 - Changed UI and terminal typography to bundled Geist variable fonts with CJK system fallbacks.
-- Refined the dark palette around neutral graphite surfaces and a restrained blue action accent.
+- Redesigned the sidebar and terminal navigation with iOS-inspired materials, segmented controls,
+  system colors, and global Geist/PingFang typography.
 - Simplified Web-only delivery to a focused check followed by direct incremental asset deployment
   without creating deployment backups.
 
