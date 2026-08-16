@@ -3,7 +3,7 @@
  */
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { GhosttyRenderer } from "./terminalRenderer";
+import { GhosttyRenderer, remapLightTerminalCell } from "./terminalRenderer";
 
 const ghosttyMocks = vi.hoisted(() => ({
   fitAddon: vi.fn(),
@@ -34,6 +34,17 @@ afterEach(() => {
 });
 
 describe("GhosttyRenderer", () => {
+  it("maps the fixed Codex dark prompt surface to the light terminal surface", () => {
+    const promptCell = { bg_r: 58, bg_g: 57, bg_b: 69 };
+    const unrelatedCell = { bg_r: 61, bg_g: 48, bg_b: 40 };
+
+    remapLightTerminalCell(promptCell);
+    remapLightTerminalCell(unrelatedCell);
+
+    expect(promptCell).toEqual({ bg_r: 240, bg_g: 232, bg_b: 216 });
+    expect(unrelatedCell).toEqual({ bg_r: 61, bg_g: 48, bg_b: 40 });
+  });
+
   it("does not mount a terminal after disposal while its font is loading", async () => {
     const fontLoad = deferred<FontFace[]>();
     const load = vi.fn(() => fontLoad.promise);

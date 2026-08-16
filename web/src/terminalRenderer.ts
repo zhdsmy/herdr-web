@@ -1,4 +1,4 @@
-import type { FitAddon, Terminal } from "ghostty-web";
+import type { FitAddon, GhosttyCell, Terminal } from "ghostty-web";
 import {
   findFirstUrlInSelection,
   terminalSelectionRange,
@@ -29,6 +29,8 @@ import type {
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
 const TERMINAL_BACKGROUND = "#fffaf0";
+const TERMINAL_LIGHT_SURFACE_RGB = { r: 240, g: 232, b: 216 } as const;
+const CODEX_DARK_PROMPT_RGB = { r: 58, g: 57, b: 69 } as const;
 const TERMINAL_FONT_FAMILY =
   '"Noto Sans Mono Variable", "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
@@ -89,6 +91,43 @@ type GhosttySelectionManagerAccess = {
     fire?: () => void;
   };
 };
+
+type GhosttyCellReader = {
+  getLine(row: number): GhosttyCell[] | null;
+  getScrollbackLine(offset: number): GhosttyCell[] | null;
+};
+
+type TerminalColorCell = Pick<GhosttyCell, "bg_r" | "bg_g" | "bg_b">;
+
+/** Keep Codex's fixed dark prompt surface readable inside the light terminal theme. */
+export function remapLightTerminalCell(cell: TerminalColorCell) {
+  if (
+    cell.bg_r !== CODEX_DARK_PROMPT_RGB.r ||
+    cell.bg_g !== CODEX_DARK_PROMPT_RGB.g ||
+    cell.bg_b !== CODEX_DARK_PROMPT_RGB.b
+  ) {
+    return;
+  }
+  cell.bg_r = TERMINAL_LIGHT_SURFACE_RGB.r;
+  cell.bg_g = TERMINAL_LIGHT_SURFACE_RGB.g;
+  cell.bg_b = TERMINAL_LIGHT_SURFACE_RGB.b;
+}
+
+function remapLightTerminalCells(cells: GhosttyCell[] | null) {
+  cells?.forEach(remapLightTerminalCell);
+  return cells;
+}
+
+function installLightTerminalCellRemapping(terminal: Terminal) {
+  const cellReader = (terminal as unknown as { wasmTerm?: GhosttyCellReader }).wasmTerm;
+  if (!cellReader) {
+    return;
+  }
+  const getLine = cellReader.getLine.bind(cellReader);
+  const getScrollbackLine = cellReader.getScrollbackLine.bind(cellReader);
+  cellReader.getLine = (row) => remapLightTerminalCells(getLine(row));
+  cellReader.getScrollbackLine = (offset) => remapLightTerminalCells(getScrollbackLine(offset));
+}
 type TerminalBufferLine = {
   readonly length: number;
   getCell(x: number):
@@ -200,6 +239,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
     terminal.open(container);
+    installLightTerminalCellRemapping(terminal);
     terminal.attachCustomKeyEventHandler((event) => {
       const output = customKeyboardEventOutput(event);
       if (!output) {

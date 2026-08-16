@@ -21,6 +21,8 @@ preserving the app's established viewport, keyboard, and safe-area geometry. It 
 upstream modal clip path on larger screens and follows the CodeBlock typography direction for
 terminal surfaces. Compact Settings uses a rounded safe content shape so controls remain inside
 the visible panel, and terminals use a warm light palette matched to the rest of the application.
+The renderer also remaps Codex's fixed dark prompt surface to the theme's light terminal surface so
+application-provided TrueColor output remains compatible with the light terminal palette.
 
 Existing Lucide icons remain where the package's ten built-in icons do not provide an equivalent
 terminal or workspace action. Their surrounding controls follow Animal Island sizing, color,

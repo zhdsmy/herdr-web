@@ -940,6 +940,13 @@ body .app .sec > .pane-row[data-active="true"] {
   box-shadow: none;
 }
 
+.term-stage-command:disabled {
+  border-color: var(--animal-border-color);
+  color: var(--animal-muted-text);
+  background: var(--animal-terminal-surface);
+  opacity: 0.72;
+}
+
 /* Notes */
 
 .notes-surface {
@@ -1669,7 +1676,37 @@ body .app .sec > .pane-row[data-active="true"] {
 
   .tabbar {
     min-height: 46px;
-    background: var(--animal-content-bg);
+    border-bottom-color: rgb(255 255 255 / 0.18);
+    background: var(--animal-primary-color);
+  }
+
+  .tabbar-scroll {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .tabbar-tab {
+    border-color: transparent;
+    color: var(--animal-terminal-text);
+    background: rgb(255 250 240 / 0.18);
+  }
+
+  .tabbar-tab:hover {
+    border-color: rgb(255 255 255 / 0.34);
+    color: var(--animal-terminal-text);
+    background: rgb(255 250 240 / 0.28);
+  }
+
+  .tabbar-tab[data-active="true"] {
+    border-color: rgb(255 255 255 / 0.72);
+    color: var(--animal-text-color);
+    background: rgb(255 250 240 / 0.94);
+    box-shadow: 0 2px 0 rgb(61 52 40 / 0.16);
+  }
+
+  .tabbar-add {
+    border-color: rgb(255 255 255 / 0.72);
+    background: rgb(255 250 240 / 0.94);
   }
 
   .terminal-mobile-controls {
@@ -1737,6 +1774,12 @@ body .app .sec > .pane-row[data-active="true"] {
   .settings-panel {
     padding: 2px 2px 8px;
     scrollbar-gutter: stable;
+  }
+
+  .backend-list {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 
   .backend-modal .modal-actions {

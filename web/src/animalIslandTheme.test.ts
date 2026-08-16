@@ -128,6 +128,23 @@ describe("Animal Island theme contract", () => {
     expect(terminalRenderer).toContain('selectionBackground: "#bfe9e4"');
   });
 
+  it("keeps compact terminal and settings controls readable without nested clipping", () => {
+    const compactThemeCss = themeCss.replace(/\s+/gu, " ");
+
+    expect(compactThemeCss).toContain(
+      ".term-stage-command:disabled { border-color: var(--animal-border-color);",
+    );
+    expect(compactThemeCss).toContain(
+      ".tabbar { min-height: 46px; border-bottom-color: rgb(255 255 255 / 0.18); background: var(--animal-primary-color); }",
+    );
+    expect(compactThemeCss).toContain(
+      ".tabbar-scroll { background: transparent; box-shadow: none; }",
+    );
+    expect(compactThemeCss).toContain(
+      ".backend-list { max-height: none; overflow-y: visible; padding-right: 0; }",
+    );
+  });
+
   it("keeps PWA chrome aligned with the theme", () => {
     const indexHtml = readWebFile("index.html");
     const manifest = JSON.parse(readWebFile("public", "manifest.json")) as {
