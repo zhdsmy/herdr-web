@@ -12,8 +12,7 @@
 
 ### Changed
 
-- Redesigned the Herdr Web and PWA icon as a high-contrast medallion with system-aware light and
-  dark variants.
+- Redesigned the Herdr Web and PWA icon with system-aware white-on-black and black-on-white variants.
 - Applied the Animal Island UI visual system across the entire Web app, including workspace,
   terminal, notes, settings, dialogs, menus, feedback, safe areas, and mobile controls.
 - Changed UI typography to the theme-bundled Nunito and Noto Sans SC fonts, added self-hosted Noto
@@ -29,6 +28,7 @@
 
 ### Fixed
 
+- Matched Safari's top browser chrome to the compact Herdr header without changing the bottom chrome.
 - Removed the compact tab-strip divider, reset touch-sticky refresh highlights, and improved spacing
   around Bridge fields and agent sections.
 - Kept compact Settings tabs, content, and actions inside a safe rounded scrolling panel, and made

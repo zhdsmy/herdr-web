@@ -159,6 +159,8 @@ describe("Animal Island theme contract", () => {
     const indexHtml = readWebFile("index.html");
     const compactIndexHtml = indexHtml.replace(/\s+/gu, " ");
     const logoSvg = readWebFile("public", "herdr-logo.svg");
+    const darkLogoSvg = readWebFile("public", "herdr-logo-dark.svg");
+    const compactThemeCss = themeCss.replace(/\s+/gu, " ");
     const manifest = JSON.parse(readWebFile("public", "manifest.json")) as {
       background_color: string;
       theme_color: string;
@@ -172,7 +174,14 @@ describe("Animal Island theme contract", () => {
       '<link rel="apple-touch-icon" href="/herdr-logo-dark-180.png" media="(prefers-color-scheme: dark)" />',
     );
     expect(logoSvg).toContain("@media (prefers-color-scheme: dark)");
+    expect(logoSvg).toContain(".icon-background { fill: #fff; }");
+    expect(logoSvg).toContain(".icon-mark { fill: #181a1d; }");
+    expect(logoSvg).not.toContain("<circle");
+    expect(darkLogoSvg).not.toContain("<circle");
     expect(existsSync(join(webRoot, "public", "herdr-logo-dark-180.png"))).toBe(true);
+    expect(compactThemeCss).toContain(
+      "html, body { background: linear-gradient( to bottom, var(--top-chrome-bg) 0 50%, var(--bottom-chrome-bg) 50% 100% ); }",
+    );
     expect(manifest.theme_color).toBe("#19c8b9");
     expect(manifest.background_color).toBe("#f8f8f0");
   });
