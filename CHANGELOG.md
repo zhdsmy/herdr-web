@@ -28,9 +28,8 @@
 
 ### Fixed
 
-- Served one cache-busted native-size iOS home-screen icon and kept manifest icon choices raster-only
-  to prevent a sharp preview being replaced by a blurry SVG fallback.
-- Matched Safari's top browser chrome to the compact Herdr header without changing the bottom chrome.
+- Prevented iOS from shrinking and softening the home-screen logo by using one precomposed native-size
+  touch icon and removing maskable manifest candidates.
 - Removed the compact tab-strip divider, reset touch-sticky refresh highlights, and improved spacing
   around Bridge fields and agent sections.
 - Kept compact Settings tabs, content, and actions inside a safe rounded scrolling panel, and made

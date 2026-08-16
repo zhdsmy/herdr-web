@@ -172,18 +172,16 @@ describe("Animal Island theme contract", () => {
       '<link rel="icon" href="/herdr-logo-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />',
     );
     expect(compactIndexHtml).toContain(
-      '<link rel="apple-touch-icon" href="/herdr-touch-180-v3.png" />',
+      '<link rel="apple-touch-icon-precomposed" href="/herdr-touch-180-v3.png" />',
     );
-    expect(compactIndexHtml.match(/rel="apple-touch-icon"/gu)).toHaveLength(1);
+    expect(compactIndexHtml).not.toContain('rel="apple-touch-icon"');
     expect(logoSvg).toContain("@media (prefers-color-scheme: dark)");
     expect(logoSvg).toContain(".icon-background { fill: #fff; }");
     expect(logoSvg).toContain(".icon-mark { fill: #181a1d; }");
     expect(logoSvg).not.toContain("<circle");
     expect(darkLogoSvg).not.toContain("<circle");
     expect(existsSync(join(webRoot, "public", "herdr-touch-180-v3.png"))).toBe(true);
-    expect(compactThemeCss).toContain(
-      "html, body { background: linear-gradient( to bottom, var(--top-chrome-bg) 0 50%, var(--bottom-chrome-bg) 50% 100% ); }",
-    );
+    expect(compactThemeCss).not.toContain("html, body { background: linear-gradient(");
     expect(manifest.theme_color).toBe("#19c8b9");
     expect(manifest.background_color).toBe("#f8f8f0");
     expect(manifest.icons).toContainEqual({
@@ -194,6 +192,7 @@ describe("Animal Island theme contract", () => {
     });
     expect(manifest.icons[0]?.src).toBe("/herdr-home-light-1024.png");
     expect(manifest.icons.some((icon) => icon.type === "image/svg+xml")).toBe(false);
+    expect(manifest.icons.some((icon) => icon.purpose === "maskable")).toBe(false);
   });
 
   it("does not retain the previous font or cool dark palette", () => {

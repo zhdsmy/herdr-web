@@ -93,14 +93,7 @@
 }
 
 html,
-body {
-  background: linear-gradient(
-    to bottom,
-    var(--top-chrome-bg) 0 50%,
-    var(--bottom-chrome-bg) 50% 100%
-  );
-}
-
+body,
 #root,
 .animal-island-app-root {
   width: 100%;
