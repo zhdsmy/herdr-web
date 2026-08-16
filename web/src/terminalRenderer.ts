@@ -27,6 +27,7 @@ import type {
   MobileTouchSelectionEndpointTimeoutMs,
 } from "./mobileTerminalPrefs";
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
+import { isImeKeyboardEvent } from "./keyboardEvents";
 
 const TERMINAL_BACKGROUND = "#fffaf0";
 const TERMINAL_LIGHT_SURFACE_RGB = { r: 240, g: 232, b: 216 } as const;
@@ -241,7 +242,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     terminal.open(container);
     installLightTerminalCellRemapping(terminal);
     terminal.attachCustomKeyEventHandler((event) => {
-      if (isComposingKeyboardEvent(event)) {
+      if (isImeKeyboardEvent(event)) {
         return true;
       }
       const output = customKeyboardEventOutput(event);
@@ -1148,6 +1149,7 @@ export class GhosttyRenderer implements TerminalRenderer {
       return;
     }
     textarea.classList.add("ghostty-hidden-input");
+    textarea.setAttribute("inputmode", "text");
     hideGhosttyTextarea(textarea);
     cleanupEditableArtifacts(this.#container);
 
@@ -1156,7 +1158,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     let isComposing = false;
     let suppressedCompositionText: string | null = null;
     const onKeydown = (event: KeyboardEvent) => {
-      if (isComposing || isComposingKeyboardEvent(event)) {
+      if (isComposing || isImeKeyboardEvent(event)) {
         lastKeydown = null;
         return;
       }
@@ -1256,19 +1258,25 @@ export class GhosttyRenderer implements TerminalRenderer {
       isComposing = true;
       suppressedCompositionText = null;
       processedTextareaValue = textarea.value;
-      cleanupEditableArtifacts(this.#container);
+      textarea.classList.add("ghostty-composing");
     };
     const onCompositionEnd = (event: CompositionEvent) => {
       isComposing = false;
       // Ghostty's container listener sends the commit; suppress only the trailing textarea fallback.
       const output = event.data.replace(/\n/g, "\r");
       suppressedCompositionText = output || null;
-      textarea.value = "";
-      processedTextareaValue = "";
-      cleanupEditableArtifacts(this.#container);
+      const committedValue = textarea.value;
+      window.setTimeout(() => {
+        textarea.classList.remove("ghostty-composing");
+        if (textarea.isConnected && !isComposing && textarea.value === committedValue) {
+          textarea.value = "";
+          processedTextareaValue = "";
+          cleanupEditableArtifacts(this.#container);
+        }
+      }, 0);
     };
     const onBlur = () => {
-      textarea.classList.remove("ghostty-keyboard-input");
+      textarea.classList.remove("ghostty-composing", "ghostty-keyboard-input");
       this.#textInputTapGraceUntil = 0;
     };
     const onFocus = () => {
@@ -1377,10 +1385,6 @@ function keyboardEventOutput(event: KeyboardEvent) {
     default:
       return null;
   }
-}
-
-function isComposingKeyboardEvent(event: KeyboardEvent) {
-  return event.isComposing || event.keyCode === 229;
 }
 
 function customKeyboardEventOutput(event: KeyboardEvent) {

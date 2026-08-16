@@ -80,6 +80,7 @@ describe("GhosttyRenderer", () => {
     expect(sentData).toEqual([]);
 
     textarea.dispatchEvent(new CompositionEvent("compositionstart", { bubbles: true }));
+    expect(textarea.classList.contains("ghostty-composing")).toBe(true);
     textarea.dispatchEvent(
       new KeyboardEvent("keydown", { key: "n", isComposing: true, bubbles: true }),
     );

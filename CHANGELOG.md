@@ -29,8 +29,10 @@
 ### Fixed
 
 - Unified the desktop sidebar, session switcher, and terminal title bar on one solid teal, and
-  restored Chinese IME input by passing composition events through the terminal input handler while
-  withholding intermediate phonetic keystrokes.
+  restored Chinese IME input with an in-viewport terminal pre-edit surface while withholding
+  intermediate phonetic keystrokes.
+- Replaced the clipped desktop Settings silhouette with a wider rounded panel that keeps its title,
+  close control, Bridge form, and actions inside the visible bounds.
 
 - Prevented iOS from shrinking and softening the home-screen logo by using one precomposed native-size
   touch icon and removing maskable manifest candidates.

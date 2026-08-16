@@ -1780,12 +1780,26 @@ button {
 }
 
 .terminal-host .ghostty-hidden-input.ghostty-keyboard-input {
-  left: 1px !important;
-  top: 1px !important;
+  position: absolute !important;
+  left: 12px !important;
+  top: 12px !important;
+  width: min(320px, calc(100% - 24px)) !important;
+  height: 32px !important;
   opacity: 0.01 !important;
   clip-path: none !important;
   pointer-events: none !important;
   z-index: 0 !important;
+}
+
+.terminal-host .ghostty-hidden-input.ghostty-keyboard-input.ghostty-composing {
+  z-index: 4 !important;
+  opacity: 1 !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: var(--r-sm) !important;
+  color: var(--text) !important;
+  background: var(--term-bg) !important;
+  caret-color: var(--accent) !important;
+  font: 16px/30px var(--mono) !important;
 }
 
 .terminal-file-input {

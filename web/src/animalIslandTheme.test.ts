@@ -147,7 +147,16 @@ describe("Animal Island theme contract", () => {
       ".sb-head, .stage-bar, .notes-head { color: #fffef5; background: var(--animal-primary-color); }",
     );
     expect(compactBaseCss).toContain(
-      ".terminal-host .ghostty-hidden-input.ghostty-keyboard-input { left: 1px !important; top: 1px !important; opacity: 0.01 !important; clip-path: none !important; pointer-events: none !important; z-index: 0 !important; }",
+      ".terminal-host .ghostty-hidden-input.ghostty-keyboard-input { position: absolute !important; left: 12px !important; top: 12px !important; width: min(320px, calc(100% - 24px)) !important; height: 32px !important; opacity: 0.01 !important; clip-path: none !important; pointer-events: none !important; z-index: 0 !important; }",
+    );
+    expect(compactBaseCss).toContain(
+      ".terminal-host .ghostty-hidden-input.ghostty-keyboard-input.ghostty-composing { z-index: 4 !important; opacity: 1 !important; border: 1px solid var(--accent) !important;",
+    );
+    expect(compactDesktopThemeCss).toContain(
+      ".backend-modal { width: min(920px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: hidden; padding: 40px 40px 30px; border: 1.5px solid var(--animal-border-color-light); border-radius: 36px; background: var(--animal-content-bg); clip-path: none; }",
+    );
+    expect(compactDesktopThemeCss).toContain(
+      ".backend-modal .modal-close { top: 24px; right: 24px; }",
     );
     expect(compactThemeCss).toContain(
       ".backend-list { max-height: none; overflow-y: visible; }",

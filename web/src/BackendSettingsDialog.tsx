@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
+import { isImeKeyboardEvent } from "./keyboardEvents";
 import {
   duplicateBackend,
   fallbackBackendColor,
@@ -303,6 +304,9 @@ export function BackendSettingsDialog({
         aria-labelledby={titleId}
         tabIndex={-1}
         onKeyDown={(event) => {
+          if (isImeKeyboardEvent(event.nativeEvent)) {
+            return;
+          }
           if (event.key === "Escape") {
             event.preventDefault();
             onClose();
@@ -413,6 +417,7 @@ export function BackendSettingsDialog({
                             value={form.name}
                             placeholder="Home workstation"
                             autoComplete="off"
+                            inputMode="text"
                             onChange={(event) =>
                               setForm((current) => ({ ...current, name: event.target.value }))
                             }

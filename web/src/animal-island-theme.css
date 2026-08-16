@@ -1431,8 +1431,19 @@ body .app .sec > .pane-row[data-active="true"] {
 /* Settings */
 
 .backend-modal {
+  width: min(920px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
   overflow: hidden;
+  padding: 40px 40px 30px;
+  border: 1.5px solid var(--animal-border-color-light);
+  border-radius: 36px;
   background: var(--animal-content-bg);
+  clip-path: none;
+}
+
+.backend-modal .modal-close {
+  top: 24px;
+  right: 24px;
 }
 
 .backend-layout {
@@ -1477,7 +1488,7 @@ body .app .sec > .pane-row[data-active="true"] {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 2px 4px 4px 0;
+  padding: 2px 8px 10px 0;
   background: transparent;
 }
 
