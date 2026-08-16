@@ -12,6 +12,8 @@
 
 ### Changed
 
+- Refined the workspace chrome with denser segmented controls, grouped list cells, a quieter hierarchy selection, and compact mobile terminal actions.
+
 - Changed UI and terminal typography to bundled Geist variable fonts with CJK system fallbacks.
 - Redesigned the sidebar and terminal navigation with iOS-inspired materials, segmented controls,
   system colors, and global Geist/PingFang typography.
