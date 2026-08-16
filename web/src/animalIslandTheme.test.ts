@@ -164,6 +164,7 @@ describe("Animal Island theme contract", () => {
     const manifest = JSON.parse(readWebFile("public", "manifest.json")) as {
       background_color: string;
       theme_color: string;
+      icons: Array<{ src: string; sizes: string; type: string; purpose: string }>;
     };
 
     expect(indexHtml).toContain('<meta name="theme-color" content="#19c8b9" />');
@@ -171,19 +172,29 @@ describe("Animal Island theme contract", () => {
       '<link rel="icon" href="/herdr-logo-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />',
     );
     expect(compactIndexHtml).toContain(
-      '<link rel="apple-touch-icon" href="/herdr-logo-dark-180.png" media="(prefers-color-scheme: dark)" />',
+      '<link rel="apple-touch-icon" sizes="1024x1024" href="/herdr-home-light-1024.png" />',
+    );
+    expect(compactIndexHtml).toContain(
+      '<link rel="apple-touch-icon" sizes="1024x1024" href="/herdr-home-dark-1024.png" media="(prefers-color-scheme: dark)" />',
     );
     expect(logoSvg).toContain("@media (prefers-color-scheme: dark)");
     expect(logoSvg).toContain(".icon-background { fill: #fff; }");
     expect(logoSvg).toContain(".icon-mark { fill: #181a1d; }");
     expect(logoSvg).not.toContain("<circle");
     expect(darkLogoSvg).not.toContain("<circle");
-    expect(existsSync(join(webRoot, "public", "herdr-logo-dark-180.png"))).toBe(true);
+    expect(existsSync(join(webRoot, "public", "herdr-home-light-1024.png"))).toBe(true);
+    expect(existsSync(join(webRoot, "public", "herdr-home-dark-1024.png"))).toBe(true);
     expect(compactThemeCss).toContain(
       "html, body { background: linear-gradient( to bottom, var(--top-chrome-bg) 0 50%, var(--bottom-chrome-bg) 50% 100% ); }",
     );
     expect(manifest.theme_color).toBe("#19c8b9");
     expect(manifest.background_color).toBe("#f8f8f0");
+    expect(manifest.icons).toContainEqual({
+      src: "/herdr-home-light-1024.png",
+      sizes: "1024x1024",
+      type: "image/png",
+      purpose: "any",
+    });
   });
 
   it("does not retain the previous font or cool dark palette", () => {
