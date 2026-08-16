@@ -130,15 +130,17 @@ describe("Animal Island theme contract", () => {
 
   it("keeps compact terminal and settings controls readable without nested clipping", () => {
     const compactThemeCss = themeCss.replace(/\s+/gu, " ");
+    const desktopThemeCss = themeCss.slice(0, themeCss.indexOf("@media (max-width: 760px)"));
+    const compactDesktopThemeCss = desktopThemeCss.replace(/\s+/gu, " ");
 
     expect(compactThemeCss).toContain(
       ".term-stage-command:disabled { border-color: var(--animal-border-color);",
     );
-    expect(compactThemeCss).toContain(
-      ".tabbar { min-height: 46px; border-bottom: 0; background: var(--animal-primary-color); }",
+    expect(compactDesktopThemeCss).toContain(
+      ".tabbar { gap: 6px; min-height: 46px; padding: 5px 8px; border-bottom: 0; background: var(--animal-primary-color); }",
     );
-    expect(compactThemeCss).toContain(
-      ".tabbar-scroll { background: transparent; box-shadow: none; }",
+    expect(compactDesktopThemeCss).toContain(
+      ".tabbar-scroll { gap: 5px; background: transparent; box-shadow: none; }",
     );
     expect(compactThemeCss).toContain(
       ".backend-list { max-height: none; overflow-y: visible; }",

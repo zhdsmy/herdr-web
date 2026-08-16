@@ -28,6 +28,9 @@
 
 ### Fixed
 
+- Matched the desktop session switch bar to the teal terminal chrome and restored Chinese IME input
+  by withholding composition keystrokes until the committed text is ready.
+
 - Prevented iOS from shrinking and softening the home-screen logo by using one precomposed native-size
   touch icon and removing maskable manifest candidates.
 - Removed the compact tab-strip divider, reset touch-sticky refresh highlights, and improved spacing

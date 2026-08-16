@@ -705,28 +705,43 @@ body .app .sec > .pane-row[data-active="true"] {
 
 .tabbar {
   gap: 6px;
-  min-height: 43px;
+  min-height: 46px;
   padding: 5px 8px;
-  border-bottom: 1.5px solid var(--animal-border-color-light);
-  background: rgb(247 243 223 / 0.8);
+  border-bottom: 0;
+  background: var(--animal-primary-color);
 }
 
 .tabbar-scroll {
   gap: 5px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .tabbar-tab {
   min-height: 32px;
   padding-inline: 12px;
-  background: rgb(248 248 240 / 0.74);
+  border-color: transparent;
+  color: var(--animal-terminal-text);
+  background: rgb(255 250 240 / 0.18);
+}
+
+.tabbar-tab:hover {
+  border-color: rgb(255 255 255 / 0.34);
+  color: var(--animal-terminal-text);
+  background: rgb(255 250 240 / 0.28);
 }
 
 .tabbar-tab[data-active="true"] {
-  box-shadow: 0 2px 0 rgb(80 185 171 / 0.34);
+  border-color: rgb(255 255 255 / 0.72);
+  color: var(--animal-text-color);
+  background: rgb(255 250 240 / 0.94);
+  box-shadow: 0 2px 0 rgb(61 52 40 / 0.16);
 }
 
 .tabbar-add {
   align-self: center;
+  border-color: rgb(255 255 255 / 0.72);
+  background: rgb(255 250 240 / 0.94);
 }
 
 .terminal-stage,
@@ -1702,41 +1717,6 @@ body .app .sec > .pane-row[data-active="true"] {
 
   .stage-bar {
     min-height: 52px;
-  }
-
-  .tabbar {
-    min-height: 46px;
-    border-bottom: 0;
-    background: var(--animal-primary-color);
-  }
-
-  .tabbar-scroll {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .tabbar-tab {
-    border-color: transparent;
-    color: var(--animal-terminal-text);
-    background: rgb(255 250 240 / 0.18);
-  }
-
-  .tabbar-tab:hover {
-    border-color: rgb(255 255 255 / 0.34);
-    color: var(--animal-terminal-text);
-    background: rgb(255 250 240 / 0.28);
-  }
-
-  .tabbar-tab[data-active="true"] {
-    border-color: rgb(255 255 255 / 0.72);
-    color: var(--animal-text-color);
-    background: rgb(255 250 240 / 0.94);
-    box-shadow: 0 2px 0 rgb(61 52 40 / 0.16);
-  }
-
-  .tabbar-add {
-    border-color: rgb(255 255 255 / 0.72);
-    background: rgb(255 250 240 / 0.94);
   }
 
   .terminal-mobile-controls {

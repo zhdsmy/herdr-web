@@ -173,7 +173,7 @@ export class GhosttyRenderer implements TerminalRenderer {
   #scrollSensitivity = 1;
   #scrollCallback: ((lines: number) => void) | null = null;
   #touchCleanup: (() => void) | null = null;
-  #mobileInputCleanup: (() => void) | null = null;
+  #textInputCleanup: (() => void) | null = null;
   #tapFocusHandler: (() => TerminalTapFocusResult) | null = null;
   #mobileLongPressBehavior: MobileLongPressBehavior = "off";
   #mobileTouchSelectionHandler: ((event: MobileTerminalTouchEvent) => void) | null = null;
@@ -241,6 +241,9 @@ export class GhosttyRenderer implements TerminalRenderer {
     terminal.open(container);
     installLightTerminalCellRemapping(terminal);
     terminal.attachCustomKeyEventHandler((event) => {
+      if (isComposingKeyboardEvent(event)) {
+        return true;
+      }
       const output = customKeyboardEventOutput(event);
       if (!output) {
         return false;
@@ -260,7 +263,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     this.#terminal = terminal;
     this.#fitAddon = fitAddon;
     this.#installScrollHandlers();
-    this.#installMobileInputBridge();
+    this.#installTextInputBridge();
     return this.fit();
   }
 
@@ -358,8 +361,8 @@ export class GhosttyRenderer implements TerminalRenderer {
     this.#disposed = true;
     this.#touchCleanup?.();
     this.#touchCleanup = null;
-    this.#mobileInputCleanup?.();
-    this.#mobileInputCleanup = null;
+    this.#textInputCleanup?.();
+    this.#textInputCleanup = null;
     this.#fitAddon?.dispose();
     this.#fitAddon = null;
     this.#terminal?.dispose();
@@ -1138,7 +1141,7 @@ export class GhosttyRenderer implements TerminalRenderer {
     };
   }
 
-  #installMobileInputBridge() {
+  #installTextInputBridge() {
     const terminal = this.#requireTerminal();
     const textarea = terminal.textarea;
     if (!textarea) {
@@ -1150,7 +1153,18 @@ export class GhosttyRenderer implements TerminalRenderer {
 
     let lastKeydown: { data: string; time: number } | null = null;
     let processedTextareaValue = "";
+    let isComposing = false;
+    let suppressedCompositionText: string | null = null;
     const onKeydown = (event: KeyboardEvent) => {
+      if (isComposing || isComposingKeyboardEvent(event)) {
+        lastKeydown = null;
+        event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation();
+        }
+        return;
+      }
+      suppressedCompositionText = null;
       const customOutput = textareaKeyboardEventOutput(event);
       if (customOutput) {
         event.preventDefault();
@@ -1170,6 +1184,24 @@ export class GhosttyRenderer implements TerminalRenderer {
       }
     };
     const onBeforeInput = (event: InputEvent) => {
+      if (isComposing || event.isComposing || event.inputType === "insertCompositionText") {
+        return;
+      }
+      if (
+        suppressedCompositionText &&
+        event.data?.replace(/\n/g, "\r") === suppressedCompositionText
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation();
+        }
+        suppressedCompositionText = null;
+        textarea.value = "";
+        processedTextareaValue = "";
+        cleanupEditableArtifacts(this.#container);
+        return;
+      }
       const output = beforeInputOutput(event);
       if (!output) {
         return;
@@ -1207,10 +1239,23 @@ export class GhosttyRenderer implements TerminalRenderer {
       }
       cleanupEditableArtifacts(this.#container);
     };
-    const onInput = () => {
+    const onInput = (event: Event) => {
+      const inputEvent = event as InputEvent;
+      if (isComposing || inputEvent.isComposing) {
+        return;
+      }
+      if (suppressedCompositionText && textarea.value === suppressedCompositionText) {
+        suppressedCompositionText = null;
+        textarea.value = "";
+        processedTextareaValue = "";
+        cleanupEditableArtifacts(this.#container);
+        return;
+      }
       sendTextareaDelta();
     };
     const onCompositionStart = (event: CompositionEvent) => {
+      isComposing = true;
+      suppressedCompositionText = null;
       processedTextareaValue = textarea.value;
       event.stopPropagation();
       if (typeof event.stopImmediatePropagation === "function") {
@@ -1225,11 +1270,16 @@ export class GhosttyRenderer implements TerminalRenderer {
       }
     };
     const onCompositionEnd = (event: CompositionEvent) => {
+      isComposing = false;
       event.stopPropagation();
       if (typeof event.stopImmediatePropagation === "function") {
         event.stopImmediatePropagation();
       }
-      sendTextareaDelta();
+      const output = event.data.replace(/\n/g, "\r");
+      if (output) {
+        terminal.input(output, true);
+        suppressedCompositionText = output;
+      }
       textarea.value = "";
       processedTextareaValue = "";
       cleanupEditableArtifacts(this.#container);
@@ -1238,6 +1288,9 @@ export class GhosttyRenderer implements TerminalRenderer {
       textarea.classList.remove("ghostty-keyboard-input");
       this.#textInputTapGraceUntil = 0;
     };
+    const onFocus = () => {
+      textarea.classList.add("ghostty-keyboard-input");
+    };
 
     textarea.addEventListener("keydown", onKeydown, { capture: true });
     textarea.addEventListener("beforeinput", onBeforeInput, { capture: true });
@@ -1245,14 +1298,16 @@ export class GhosttyRenderer implements TerminalRenderer {
     textarea.addEventListener("compositionstart", onCompositionStart, { capture: true });
     textarea.addEventListener("compositionupdate", onCompositionUpdate, { capture: true });
     textarea.addEventListener("compositionend", onCompositionEnd, { capture: true });
+    textarea.addEventListener("focus", onFocus);
     textarea.addEventListener("blur", onBlur);
-    this.#mobileInputCleanup = () => {
+    this.#textInputCleanup = () => {
       textarea.removeEventListener("keydown", onKeydown, { capture: true });
       textarea.removeEventListener("beforeinput", onBeforeInput, { capture: true });
       textarea.removeEventListener("input", onInput);
       textarea.removeEventListener("compositionstart", onCompositionStart, { capture: true });
       textarea.removeEventListener("compositionupdate", onCompositionUpdate, { capture: true });
       textarea.removeEventListener("compositionend", onCompositionEnd, { capture: true });
+      textarea.removeEventListener("focus", onFocus);
       textarea.removeEventListener("blur", onBlur);
     };
   }
@@ -1341,6 +1396,10 @@ function keyboardEventOutput(event: KeyboardEvent) {
     default:
       return null;
   }
+}
+
+function isComposingKeyboardEvent(event: KeyboardEvent) {
+  return event.isComposing || event.keyCode === 229;
 }
 
 function customKeyboardEventOutput(event: KeyboardEvent) {
