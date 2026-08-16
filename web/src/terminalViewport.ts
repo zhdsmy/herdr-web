@@ -1,5 +1,6 @@
 const VIEWPORT_SETTLE_DELAY_MS = 180;
 const VISUAL_KEYBOARD_MIN_HEIGHT_PX = 80;
+const VISUAL_VIEWPORT_OFFSET_ALLOWANCE_PX = 40;
 
 type TerminalViewport = Pick<EventTarget, "addEventListener" | "removeEventListener">;
 type VisualViewportGeometry = Pick<VisualViewport, "height" | "offsetTop">;
@@ -31,7 +32,11 @@ export function isVisualKeyboardOpen(
   if (!visualViewport) {
     return false;
   }
-  const obscuredHeight = layoutViewportHeight - visualViewport.height - visualViewport.offsetTop;
+  // iOS can pan the visual viewport far down while keeping the keyboard open.
+  const obscuredHeight =
+    layoutViewportHeight -
+    visualViewport.height -
+    Math.min(visualViewport.offsetTop, VISUAL_VIEWPORT_OFFSET_ALLOWANCE_PX);
   return obscuredHeight >= VISUAL_KEYBOARD_MIN_HEIGHT_PX;
 }
 

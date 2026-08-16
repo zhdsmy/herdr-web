@@ -33,6 +33,10 @@ describe("isVisualKeyboardOpen", () => {
     expect(isVisualKeyboardOpen(844, { height: 540, offsetTop: 24 })).toBe(true);
   });
 
+  it("stays open when iOS pans the visual viewport toward the focused input", () => {
+    expect(isVisualKeyboardOpen(844, { height: 540, offsetTop: 260 })).toBe(true);
+  });
+
   it("ignores browser chrome and small viewport offsets", () => {
     expect(isVisualKeyboardOpen(844, { height: 740, offsetTop: 25 })).toBe(false);
   });
