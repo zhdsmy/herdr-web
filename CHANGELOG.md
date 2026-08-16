@@ -12,11 +12,14 @@
 
 ### Changed
 
+- Applied the Animal Island UI visual system across the entire Web app, including workspace,
+  terminal, notes, settings, dialogs, menus, feedback, safe areas, and mobile controls.
+- Changed UI typography to the theme-bundled Nunito and Noto Sans SC fonts, and changed terminal
+  typography and colors to the theme's warm CodeBlock direction.
 - Refined the workspace chrome with denser segmented controls, grouped list cells, a quieter hierarchy selection, and compact mobile terminal actions.
 
-- Changed UI and terminal typography to bundled Geist variable fonts with CJK system fallbacks.
-- Redesigned the sidebar and terminal navigation with iOS-inspired materials, segmented controls,
-  system colors, and global Geist/PingFang typography.
+- Preserved the iOS and iPadOS safe-area and keyboard geometry while replacing the previous
+  iOS-inspired visual layer with the Animal Island theme.
 - Simplified Web-only delivery to a focused check followed by direct incremental asset deployment
   without creating deployment backups.
 

@@ -1,5 +1,5 @@
 /* ========================================================================
-   herdr-web - graphite dark UI with Geist UI and terminal fonts
+   herdr-web - layout and interaction foundations
    A compact "command deck" for your agents: one scrollable column of
    scoped sections (spaces -> panes), terminal on the side / in front.
    ======================================================================== */
@@ -64,11 +64,10 @@
   --mobile-controls-scale: 1;
 
   --ui:
-    "Geist Variable", "PingFang SC", "PingFang TC", -apple-system, BlinkMacSystemFont,
-    "Microsoft YaHei", system-ui, "Segoe UI", sans-serif;
+    "Nunito", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --mono:
-    "Geist Mono Variable", "PingFang SC", "PingFang TC", ui-monospace, "SFMono-Regular",
-    "Microsoft YaHei", monospace;
+    "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC",
+    "PingFang SC", monospace;
 
   font-family: var(--ui);
   background: var(--bottom-chrome-bg);

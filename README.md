@@ -48,6 +48,7 @@ bridge/              Slim Rust HTTP/WebSocket bridge executable
 vendor/herdr-compat/ minimal Herdr protocol/API compatibility crate
 scripts/run-bridge.sh
 scripts/check-vendor.sh
+docs/animal-island-theme.md
 docs/android.md
 docs/deployment.md
 docs/vendoring.md
@@ -421,6 +422,9 @@ surface.
 
 `herdr-web` builds on several projects and tools:
 
+- [Animal Island UI](https://github.com/guokaigdg/animal-island-ui), used by the experimental Web
+  theme under the non-commercial CC BY-NC 4.0 license; see
+  [the attribution and modification notice](docs/animal-island-theme.md).
 - [Herdr](https://github.com/ogulcancelik/herdr), the terminal workspace manager this app extends.
 - [Ghostty Web](https://www.npmjs.com/package/ghostty-web), used by the browser terminal renderer.
 - [Ghostty](https://github.com/ghostty-org/ghostty), including Ghostty VT / `libghostty-vt`,

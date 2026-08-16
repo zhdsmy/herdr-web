@@ -28,9 +28,9 @@ import type {
 } from "./mobileTerminalPrefs";
 import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
-const TERMINAL_BACKGROUND = "#08090c";
+const TERMINAL_BACKGROUND = "#2b2118";
 const TERMINAL_FONT_FAMILY =
-  '"Geist Mono Variable", "PingFang SC", "PingFang TC", ui-monospace, "SFMono-Regular", "Microsoft YaHei", monospace';
+  '"SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
 const TOUCH_SELECTION_LONG_PRESS_MS = 600;
 const TOUCH_SELECTION_TOLERANCE_PX = 10;
@@ -154,7 +154,7 @@ export class GhosttyRenderer implements TerminalRenderer {
       throw new Error("terminal renderer disposed");
     }
 
-    await document.fonts?.load(`${this.#fontSizePx}px "Geist Mono Variable"`).catch(() => []);
+    await document.fonts?.load(`${this.#fontSizePx}px "Noto Sans SC"`).catch(() => []);
     if (this.#disposed) {
       throw new Error("terminal renderer disposed");
     }
@@ -169,25 +169,25 @@ export class GhosttyRenderer implements TerminalRenderer {
       smoothScrollDuration: 0,
       theme: {
         background: TERMINAL_BACKGROUND,
-        foreground: "#cdd6f4",
-        cursor: "#f5e0dc",
-        selectionBackground: "#45475a",
-        black: "#45475a",
-        red: "#f38ba8",
-        green: "#a6e3a1",
-        yellow: "#f9e2af",
-        blue: "#89b4fa",
-        magenta: "#f5c2e7",
-        cyan: "#94e2d5",
-        white: "#bac2de",
-        brightBlack: "#585b70",
-        brightRed: "#f38ba8",
-        brightGreen: "#a6e3a1",
-        brightYellow: "#f9e2af",
-        brightBlue: "#89b4fa",
-        brightMagenta: "#f5c2e7",
-        brightCyan: "#94e2d5",
-        brightWhite: "#a6adc8",
+        foreground: "#e8d5bc",
+        cursor: "#ffcc00",
+        selectionBackground: "#665342",
+        black: "#3d3028",
+        red: "#e06c75",
+        green: "#a8d4a0",
+        yellow: "#e8c87a",
+        blue: "#80c0e0",
+        magenta: "#d4a0e0",
+        cyan: "#82d5bb",
+        white: "#e8d5bc",
+        brightBlack: "#6b5e50",
+        brightRed: "#f08b89",
+        brightGreen: "#c3e2ae",
+        brightYellow: "#f0d990",
+        brightBlue: "#9ed2e8",
+        brightMagenta: "#e3b9e8",
+        brightCyan: "#a6e0cf",
+        brightWhite: "#fff1de",
       },
     });
     const fitAddon = new FitAddon();
@@ -602,10 +602,10 @@ export class GhosttyRenderer implements TerminalRenderer {
       const markerColor = cssColor(
         container,
         "--terminal-touch-marker",
-        cssColor(container, "--accent", "#b4befe"),
+        cssColor(container, "--accent", "#19c8b9"),
       );
       ctx.lineCap = "butt";
-      ctx.strokeStyle = "rgba(17, 17, 27, 0.78)";
+      ctx.strokeStyle = "rgba(43, 33, 24, 0.78)";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(cursor.caretX, cursor.caretTop);
@@ -618,7 +618,7 @@ export class GhosttyRenderer implements TerminalRenderer {
       ctx.lineTo(cursor.caretX, cursor.caretBottom);
       ctx.stroke();
       ctx.lineCap = "butt";
-      ctx.strokeStyle = "rgba(17, 17, 27, 0.85)";
+      ctx.strokeStyle = "rgba(43, 33, 24, 0.85)";
       ctx.lineWidth = 1;
       ctx.strokeRect(1, 1, TOUCH_LOUPE_WIDTH_PX - 2, TOUCH_LOUPE_HEIGHT_PX - 2);
     };
