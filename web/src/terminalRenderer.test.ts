@@ -68,7 +68,7 @@ describe("GhosttyRenderer", () => {
   });
 
   it("holds IME keystrokes and emits the committed Chinese text once", async () => {
-    const { renderer, sentData, textarea } = await mountInputTerminal();
+    const { renderer, sentData, terminalInput, textarea } = await mountInputTerminal();
     const disposeInput = renderer.onInput((data) => sentData.push(data));
 
     textarea.dispatchEvent(new FocusEvent("focus"));
@@ -111,6 +111,7 @@ describe("GhosttyRenderer", () => {
 
     expect(trailingBeforeInput.defaultPrevented).toBe(true);
     expect(sentData).toEqual(["你"]);
+    expect(terminalInput).not.toHaveBeenCalled();
 
     disposeInput();
     renderer.dispose();
@@ -118,13 +119,15 @@ describe("GhosttyRenderer", () => {
 });
 
 async function mountInputTerminal() {
+  const { InputHandler } = await vi.importActual<typeof import("ghostty-web")>("ghostty-web");
   const textarea = document.createElement("textarea");
   const canvas = document.createElement("canvas");
   const sentData: string[] = [];
   let customKeyHandler: ((event: KeyboardEvent) => boolean) | null = null;
   let dataHandler: ((data: string) => void) | null = null;
-  let ghosttyCompositionActive = false;
+  let inputHandler: InstanceType<typeof InputHandler> | null = null;
   const emitData = (data: string) => dataHandler?.(data);
+  const terminalInput = vi.fn((data: string) => emitData(data));
   const terminal = {
     cols: 80,
     rows: 24,
@@ -137,35 +140,34 @@ async function mountInputTerminal() {
     loadAddon: vi.fn(),
     open: vi.fn((container: HTMLElement) => {
       container.append(textarea, canvas);
-      textarea.addEventListener("compositionstart", () => {
-        ghosttyCompositionActive = true;
-      });
-      textarea.addEventListener("compositionend", (event) => {
-        ghosttyCompositionActive = false;
-        emitData(event.data);
-      });
-      textarea.addEventListener("keydown", (event) => {
-        if (customKeyHandler?.(event) || ghosttyCompositionActive) {
-          return;
-        }
-        if (event.key.length === 1) {
-          emitData(event.key);
-        }
-      });
+      inputHandler = new InputHandler(
+        {
+          createKeyEncoder: () => ({
+            encode: vi.fn(() => new Uint8Array()),
+            setOption: vi.fn(),
+          }),
+        } as never,
+        container,
+        emitData,
+        vi.fn(),
+        undefined,
+        customKeyHandler ?? undefined,
+      );
     }),
     attachCustomKeyEventHandler: vi.fn((handler: (event: KeyboardEvent) => boolean) => {
       customKeyHandler = handler;
+      inputHandler?.setCustomKeyEventHandler(handler);
     }),
     attachCustomWheelEventHandler: vi.fn(),
     hasMouseTracking: vi.fn(() => false),
-    input: vi.fn((data: string) => emitData(data)),
+    input: terminalInput,
     onData: vi.fn((handler: (data: string) => void) => {
       dataHandler = handler;
       return { dispose: () => (dataHandler = null) };
     }),
     clearSelection: vi.fn(),
     scrollLines: vi.fn(),
-    dispose: vi.fn(),
+    dispose: vi.fn(() => inputHandler?.dispose()),
   };
   const fitAddon = { fit: vi.fn(), dispose: vi.fn() };
   ghosttyMocks.terminal.mockImplementation(function TerminalMock() {
@@ -177,7 +179,7 @@ async function mountInputTerminal() {
 
   const renderer = new GhosttyRenderer();
   await renderer.mount(document.createElement("div"));
-  return { renderer, sentData, textarea };
+  return { renderer, sentData, terminalInput, textarea };
 }
 
 function deferred<T>(): Deferred<T> {

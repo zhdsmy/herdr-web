@@ -1158,10 +1158,6 @@ export class GhosttyRenderer implements TerminalRenderer {
     const onKeydown = (event: KeyboardEvent) => {
       if (isComposing || isComposingKeyboardEvent(event)) {
         lastKeydown = null;
-        event.stopPropagation();
-        if (typeof event.stopImmediatePropagation === "function") {
-          event.stopImmediatePropagation();
-        }
         return;
       }
       suppressedCompositionText = null;
@@ -1244,7 +1240,10 @@ export class GhosttyRenderer implements TerminalRenderer {
       if (isComposing || inputEvent.isComposing) {
         return;
       }
-      if (suppressedCompositionText && textarea.value === suppressedCompositionText) {
+      if (
+        suppressedCompositionText &&
+        textarea.value.replace(/\n/g, "\r") === suppressedCompositionText
+      ) {
         suppressedCompositionText = null;
         textarea.value = "";
         processedTextareaValue = "";
@@ -1253,33 +1252,17 @@ export class GhosttyRenderer implements TerminalRenderer {
       }
       sendTextareaDelta();
     };
-    const onCompositionStart = (event: CompositionEvent) => {
+    const onCompositionStart = () => {
       isComposing = true;
       suppressedCompositionText = null;
       processedTextareaValue = textarea.value;
-      event.stopPropagation();
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
-      }
       cleanupEditableArtifacts(this.#container);
-    };
-    const onCompositionUpdate = (event: CompositionEvent) => {
-      event.stopPropagation();
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
-      }
     };
     const onCompositionEnd = (event: CompositionEvent) => {
       isComposing = false;
-      event.stopPropagation();
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
-      }
+      // Ghostty's container listener sends the commit; suppress only the trailing textarea fallback.
       const output = event.data.replace(/\n/g, "\r");
-      if (output) {
-        terminal.input(output, true);
-        suppressedCompositionText = output;
-      }
+      suppressedCompositionText = output || null;
       textarea.value = "";
       processedTextareaValue = "";
       cleanupEditableArtifacts(this.#container);
@@ -1296,7 +1279,6 @@ export class GhosttyRenderer implements TerminalRenderer {
     textarea.addEventListener("beforeinput", onBeforeInput, { capture: true });
     textarea.addEventListener("input", onInput);
     textarea.addEventListener("compositionstart", onCompositionStart, { capture: true });
-    textarea.addEventListener("compositionupdate", onCompositionUpdate, { capture: true });
     textarea.addEventListener("compositionend", onCompositionEnd, { capture: true });
     textarea.addEventListener("focus", onFocus);
     textarea.addEventListener("blur", onBlur);
@@ -1305,7 +1287,6 @@ export class GhosttyRenderer implements TerminalRenderer {
       textarea.removeEventListener("beforeinput", onBeforeInput, { capture: true });
       textarea.removeEventListener("input", onInput);
       textarea.removeEventListener("compositionstart", onCompositionStart, { capture: true });
-      textarea.removeEventListener("compositionupdate", onCompositionUpdate, { capture: true });
       textarea.removeEventListener("compositionend", onCompositionEnd, { capture: true });
       textarea.removeEventListener("focus", onFocus);
       textarea.removeEventListener("blur", onBlur);

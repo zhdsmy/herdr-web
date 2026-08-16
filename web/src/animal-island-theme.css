@@ -224,9 +224,7 @@ select:focus-visible {
 .stage-bar,
 .notes-head {
   color: #fffef5;
-  background: rgb(25 200 185 / 0.96);
-  backdrop-filter: blur(14px) saturate(1.08);
-  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  background: var(--animal-primary-color);
 }
 
 .sb-head {

@@ -28,8 +28,9 @@
 
 ### Fixed
 
-- Matched the desktop session switch bar to the teal terminal chrome and restored Chinese IME input
-  by withholding composition keystrokes until the committed text is ready.
+- Unified the desktop sidebar, session switcher, and terminal title bar on one solid teal, and
+  restored Chinese IME input by passing composition events through the terminal input handler while
+  withholding intermediate phonetic keystrokes.
 
 - Prevented iOS from shrinking and softening the home-screen logo by using one precomposed native-size
   touch icon and removing maskable manifest candidates.

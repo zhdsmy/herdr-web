@@ -1782,6 +1782,8 @@ button {
 .terminal-host .ghostty-hidden-input.ghostty-keyboard-input {
   left: 1px !important;
   top: 1px !important;
+  opacity: 0.01 !important;
+  clip-path: none !important;
   pointer-events: none !important;
   z-index: 0 !important;
 }
