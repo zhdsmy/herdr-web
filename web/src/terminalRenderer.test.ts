@@ -35,7 +35,7 @@ afterEach(() => {
 
 describe("GhosttyRenderer", () => {
   it("maps the fixed Codex dark prompt surface to the light terminal surface", () => {
-    const promptCell = { bg_r: 58, bg_g: 57, bg_b: 69 };
+    const promptCell = { bg_r: 57, bg_g: 57, bg_b: 71 };
     const unrelatedCell = { bg_r: 61, bg_g: 48, bg_b: 40 };
 
     remapLightTerminalCell(promptCell);

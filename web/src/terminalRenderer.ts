@@ -30,7 +30,7 @@ import { DEFAULT_TERMINAL_FONT_SIZE_PX } from "./terminalPrefs";
 
 const TERMINAL_BACKGROUND = "#fffaf0";
 const TERMINAL_LIGHT_SURFACE_RGB = { r: 240, g: 232, b: 216 } as const;
-const CODEX_DARK_PROMPT_RGB = { r: 58, g: 57, b: 69 } as const;
+const CODEX_DARK_PROMPT_RGB = { r: 57, g: 57, b: 71 } as const;
 const TERMINAL_FONT_FAMILY =
   '"Noto Sans Mono Variable", "SF Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans SC", "PingFang SC", monospace';
 const TERMINAL_TEXT_INPUT_TAP_GRACE_MS = 4000;
