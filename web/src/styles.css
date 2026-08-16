@@ -166,6 +166,10 @@ button {
   --viewport-inset-bottom: 0px;
 }
 
+.app[data-visual-keyboard="open"] .terminal-mobile-controls {
+  padding-bottom: 0;
+}
+
 .app[data-resizing-sidebar="true"],
 .app[data-resizing-notes="true"],
 .app[data-resizing-notes-list="true"] {
